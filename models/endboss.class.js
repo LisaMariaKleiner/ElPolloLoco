@@ -19,7 +19,7 @@ class Endboss extends MoveableObject {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING); //greift auf die Bilder im Array zu (IMAGES_WALKING)
 
-        this.x = 2500;
+        this.x = 2000;
         this.animate();
     }
 

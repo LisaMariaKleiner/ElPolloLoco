@@ -51,5 +51,5 @@ window.addEventListener("keyup", (e) => {
     }
 
 
-    console.log(e);
+    //console.log(e);
 });

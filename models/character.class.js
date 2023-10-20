@@ -1,7 +1,7 @@
 class Character extends MoveableObject {
   height = 250;
   width = 120;
-  y = -100; // 180 vorher
+  y = 180; // 180 vorher
   speed = 4;
   world;
   walking_sound = new Audio("sounds/run.mp3");
@@ -27,6 +27,17 @@ class Character extends MoveableObject {
   "img/2_character_pepe/3_jump/J-39.png",
   ];
 
+
+  IMAGES_DEAD = [
+    "img/2_character_pepe/5_dead/D-51.png",
+    "img/2_character_pepe/5_dead/D-52.png",
+    "img/2_character_pepe/5_dead/D-53.png",
+    "img/2_character_pepe/5_dead/D-54.png",
+    "img/2_character_pepe/5_dead/D-55.png",
+    "img/2_character_pepe/5_dead/D-56.png",
+    "img/2_character_pepe/5_dead/D-57.png"
+  ]
+
   
 
   // Constructor wird zuerst ausgeführt!
@@ -44,15 +55,22 @@ class Character extends MoveableObject {
       this.walking_sound.pause();
 
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-        this.x += this.speed;
+        this.moveRight();
         this.otherDirection = false; // Bild nicht gespiegelt
         this.walking_sound.play();
       }
+
       if (this.world.keyboard.LEFT && this.x > 0) {
-        this.x -= this.speed;
+        this.moveLeft();
         this.otherDirection = true; // Bild gespiegelt
         this.walking_sound.play();
       }
+
+      if(this.world.keyboard.SPACE && !this.isInAir()) {
+       this.jump();
+      }
+
+
       this.world.camera_x = -this.x + 100;
     }, 1000 / 60);
 

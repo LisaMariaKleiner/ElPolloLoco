@@ -1,6 +1,5 @@
 class Chicken extends MoveableObject {
 
-    
     y = 370;
     width = 60;
     height = 60;
@@ -29,7 +28,13 @@ class Chicken extends MoveableObject {
 
 
     animate() {
-        this.moveLeft();
+
+        setInterval(() => { // Intervall Funktion
+            this.moveLeft();
+            this.otherDirection = false; // Bild gespiegelt
+        }, 1000 / 60); // mit 60 FPS (60x pro sek)
+        
+        
 
         setInterval( () => {
             this.playAnimation(this.IMAGES_WALKING);
