@@ -8,8 +8,26 @@ class MoveableObject {
     currentImage = 0;
     speed = 0.15;
     otherDirection = false;
-
+    speedY = 0;
+    acceleration = 3;
     
+
+
+
+// Charakter fällt runter
+    applyGravity() {
+        setInterval(() => {
+            if(this.isInAir()) {
+            this.y -= this.speedY;
+            this.speedY -= this.acceleration;
+            }
+        }, 1000 / 25);
+    }
+
+// Charakter befindet sich in der Luft
+    isInAir() {
+        return this.y < 180;
+    }
 
 
 //z.B loadImage('img/testbild.png') -> Das bild ist jetzt der Pfad.
