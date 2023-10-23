@@ -1,52 +1,15 @@
-class MoveableObject {
-  x = 120;
-  y = 180;
-  height = 250;
-  width = 120;
-  img;
-  imageCache = {};
-  currentImage = 0;
+class MoveableObject extends DrawableObject {
   speed = 0.15;
   otherDirection = false;
   speedY = 0;
   acceleration = 3;
   energy = 100;
+  lastHit = 0;
 
   
-
-  //z.B loadImage('img/testbild.png') -> Das bild ist jetzt der Pfad.
-  loadImage(path) {
-    this.img = new Image(); // this.img = document.getElementById('image') oder wie -> <img id="image" src="">
-    this.img.src = path;
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-  }
-
-  drawFrame(ctx) {
-    if (this instanceof Character || this instanceof Chicken) {
-      // Frame nur bei Charakter und Chicken anwenden
-      ctx.beginPath();
-      ctx.lineWidth = "3";
-      ctx.strokeStyle = "pink";
-      ctx.rect(this.x, this.y, this.width, this.height);
-      ctx.stroke();
-    }
-  }
-
-
-  loadImages(array) {
-    array.forEach((path) => {
-      let img = new Image();
-      img.src = path;
-      this.imageCache[path] = img;
-    });
-  }
-
-
+  
   playAnimation(images) {
-    let i = this.currentImage % this.IMAGES_WALKING.length;
+    let i = this.currentImage % images.length;
     let path = images[i];
     this.img = this.imageCache[path];
     this.currentImage++;
@@ -64,12 +27,6 @@ class MoveableObject {
   }
 
 
-
-  // Charakter befindet sich in der Luft
-  isInAir() {
-    return this.y < 180;
-  }
-
   // Charakter kollidiert mit Chicken?
   isColliding(obj) {
     return (
@@ -81,11 +38,29 @@ class MoveableObject {
   }
 
 
+
+// Character getroffen? Dann zieh Energy ab
   hit() {
     this.energy -= 5;
-    if(this.energy < 0) {
+    if (this.energy < 0) {
         this.energy = 0;
+    } else {
+        this.lastHit = new Date().getTime(); // Zeit vergangen in ms seit 01.01.1970
     }
+  }
+
+
+
+  // Ist der Character tot?
+  isDead() {
+    return this.energy == 0;
+  }
+
+
+  isHurt() {
+    let timepassed = new Date().getTime() - this.lastHit; // Differenz im ms
+    timepassed = timepassed / 1000; // Differenz in sek
+    return timepassed < 1;
   }
 
   moveRight() {
@@ -96,7 +71,5 @@ class MoveableObject {
     this.x -= this.speed;
   }
 
-  jump() {
-    this.speedY = 30;
-  }
+  
 }

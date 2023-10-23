@@ -1,8 +1,8 @@
 class Chicken extends MoveableObject {
-
     y = 370;
     width = 60;
     height = 60;
+   //chicken_sound = new Audio("sounds/chickensound.mp3");
 
     IMAGES_WALKING = [
         'img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
@@ -14,7 +14,7 @@ class Chicken extends MoveableObject {
     constructor(isBackChicken = false) {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING); //greift auf die Bilder im Array zu (IMAGES_WALKING)
-
+        
         if (isBackChicken) {
             this.x = 800 + Math.random() * 1000; // Startpunkt px + zufällig generierte Zahl + 500 (Px zwischen 0 und 500)
         } else {
@@ -24,6 +24,7 @@ class Chicken extends MoveableObject {
         this.speed = 0.15 + Math.random() * 0.25;
 
         this.animate();
+        
     }
 
 
@@ -31,6 +32,7 @@ class Chicken extends MoveableObject {
 
         setInterval(() => { // Intervall Funktion
             this.moveLeft();
+            //this.chicken_sound.play();
             this.otherDirection = false; // Bild gespiegelt
         }, 1000 / 60); // mit 60 FPS (60x pro sek)
         

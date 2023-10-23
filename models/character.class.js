@@ -6,6 +6,19 @@ class Character extends MoveableObject {
   world;
   walking_sound = new Audio("sounds/run.mp3");
 
+  IMAGES_IDLE = [
+    "img/2_character_pepe/1_idle/idle/I-1.png",
+    "img/2_character_pepe/1_idle/idle/I-2.png",
+    "img/2_character_pepe/1_idle/idle/I-3.png",
+    "img/2_character_pepe/1_idle/idle/I-4.png",
+    "img/2_character_pepe/1_idle/idle/I-5.png",
+    "img/2_character_pepe/1_idle/idle/I-6.png",
+    "img/2_character_pepe/1_idle/idle/I-7.png",
+    "img/2_character_pepe/1_idle/idle/I-8.png",
+    "img/2_character_pepe/1_idle/idle/I-9.png",
+    "img/2_character_pepe/1_idle/idle/I-10.png"
+  ];
+
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
     "img/2_character_pepe/2_walk/W-22.png",
@@ -16,17 +29,16 @@ class Character extends MoveableObject {
   ];
 
   IMAGES_JUMPING = [
-  "img/2_character_pepe/3_jump/J-31.png",
-  "img/2_character_pepe/3_jump/J-32.png",
-  "img/2_character_pepe/3_jump/J-33.png",
-  "img/2_character_pepe/3_jump/J-34.png",
-  "img/2_character_pepe/3_jump/J-35.png",
-  "img/2_character_pepe/3_jump/J-36.png",
-  "img/2_character_pepe/3_jump/J-37.png",
-  "img/2_character_pepe/3_jump/J-38.png",
-  "img/2_character_pepe/3_jump/J-39.png",
+    "img/2_character_pepe/3_jump/J-31.png",
+    "img/2_character_pepe/3_jump/J-32.png",
+    "img/2_character_pepe/3_jump/J-33.png",
+    "img/2_character_pepe/3_jump/J-34.png",
+    "img/2_character_pepe/3_jump/J-35.png",
+    "img/2_character_pepe/3_jump/J-36.png",
+    "img/2_character_pepe/3_jump/J-37.png",
+    "img/2_character_pepe/3_jump/J-38.png",
+    "img/2_character_pepe/3_jump/J-39.png",
   ];
-
 
   IMAGES_DEAD = [
     "img/2_character_pepe/5_dead/D-51.png",
@@ -35,22 +47,31 @@ class Character extends MoveableObject {
     "img/2_character_pepe/5_dead/D-54.png",
     "img/2_character_pepe/5_dead/D-55.png",
     "img/2_character_pepe/5_dead/D-56.png",
-    "img/2_character_pepe/5_dead/D-57.png"
-  ]
+    "img/2_character_pepe/5_dead/D-57.png",
+  ];
 
-  
+  IMAGES_HURT = [
+    "img/2_character_pepe/4_hurt/H-41.png",
+    "img/2_character_pepe/4_hurt/H-42.png",
+    "img/2_character_pepe/4_hurt/H-43.png",
+  ];
 
   // Constructor wird zuerst ausgeführt!
   constructor() {
     super().loadImage("img/2_character_pepe/2_walk/W-21.png"); // muss nur 1x geschrieben werden
-
+    //this.loadImage(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_WALKING); //greift auf die Bilder im Array zu (IMAGES_WALKING)
     this.loadImages(this.IMAGES_JUMPING); // Bilder vom Springen im Array zu (IMAGES_JUMPING)
+    this.loadImages(this.IMAGES_HURT); // Bilder vom Springen im Array zu (IMAGES_HURT)
+    this.loadImages(this.IMAGES_DEAD); // Bilder vom Springen im Array zu (IMAGES_DEAD)
     this.applyGravity();
     this.animate();
   }
 
   animate() {
+
+    //this.playAnimation(this.IMAGES_IDLE);
+
     setInterval(() => {
       this.walking_sound.pause();
 
@@ -66,24 +87,34 @@ class Character extends MoveableObject {
         this.walking_sound.play();
       }
 
-      if(this.world.keyboard.SPACE && !this.isInAir()) {
-       this.jump();
+      if (this.world.keyboard.SPACE && !this.isInAir()) {
+        this.jump();
       }
-
 
       this.world.camera_x = -this.x + 100;
     }, 1000 / 60);
 
-    setInterval(() => {// Eine Intervallfunktion für den Bewegungsablauf
+    setInterval(() => {
+      // Eine Intervallfunktion für den Bewegungsablauf
 
-      if(this.isInAir()) {
+      if (this.isDead()) {
+        this.playAnimation(this.IMAGES_DEAD);
+      } else if (this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT);
+      } else if (this.isInAir()) {
         this.playAnimation(this.IMAGES_JUMPING);
-      } else {
-        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
           this.playAnimation(this.IMAGES_WALKING);
         }
-      }
     }, 50);
   }
 
+  jump() {
+    this.speedY = 30;
+  }
+
+  // Charakter befindet sich in der Luft
+  isInAir() {
+    return this.y < 180;
+  }
 }

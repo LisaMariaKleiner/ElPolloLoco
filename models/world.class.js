@@ -1,13 +1,12 @@
 class World {
   // In JS Klassen bei Variablen weder const noch let davor
   character = new Character();
-
   level = level1;
-
   canvas;
   ctx; // Sammlung von Kontext in Javascript
   keyboard; // Tastatur
   camera_x = -100;
+  statusBar = new StatusBar();
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -30,7 +29,7 @@ class World {
        this.level.enemies.forEach((enemies) => {
         if (this.character.isColliding(enemies) ) {
            this.character.hit();
-            console.log('Collision with Character, energy,', this.character.energy)
+           this.statusBar.setPercentage(this.character.energy);
         }
        });
     }, 200);
@@ -38,11 +37,20 @@ class World {
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas clearen!, sonst erscheint der Charakter mehrmals im Bildschirm
+    
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgrounds);
+    
+    this.ctx.translate(-this.camera_x, 0);
+    // -------- Space for fixed objects --------
+    this.addToMap(this.statusBar);
+    this.ctx.translate(this.camera_x, 0);
+
+
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.clouds);
+    
 
     this.ctx.translate(-this.camera_x, 0);
 
@@ -73,7 +81,6 @@ class World {
     }
 
     mo.draw(this.ctx) 
-    
     mo.drawFrame(this.ctx);
 
     if (mo.otherDirection) {
