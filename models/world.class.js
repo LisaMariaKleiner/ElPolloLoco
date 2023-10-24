@@ -7,6 +7,7 @@ class World {
   keyboard; // Tastatur
   camera_x = -100;
   statusBar = new StatusBar();
+  throwableObjects = [];
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -14,43 +15,51 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
-    this.checkCollisions();
+    this.run();
   }
-
-
 
   setWorld() {
     this.character.world = this;
   }
 
+  run() {
+    setInterval(() => {
+      this.checkCollisions();
+      this.checkThrowObjects();
+    }, 100);
+  }
+
+  checkThrowObjects() {
+    if (this.keyboard.D) {
+      let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+      this.throwableObjects.push(bottle);
+    }
+  }
 
   checkCollisions() {
-    setInterval(() => {
-       this.level.enemies.forEach((enemies) => {
-        if (this.character.isColliding(enemies) ) {
-           this.character.hit();
-           this.statusBar.setPercentage(this.character.energy);
-        }
-       });
-    }, 200);
+    this.level.enemies.forEach((enemies) => {
+      if (this.character.isColliding(enemies)) {
+        this.character.hit();
+        this.statusBar.setPercentage(this.character.energy);
+      }
+    });
   }
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas clearen!, sonst erscheint der Charakter mehrmals im Bildschirm
-    
+
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgrounds);
-    
+
     this.ctx.translate(-this.camera_x, 0);
     // -------- Space for fixed objects --------
     this.addToMap(this.statusBar);
     this.ctx.translate(this.camera_x, 0);
 
-
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.clouds);
-    
+    this.addObjectsToMap(this.throwableObjects);
 
     this.ctx.translate(-this.camera_x, 0);
 
@@ -62,32 +71,26 @@ class World {
     });
   }
 
-
-
   addObjectsToMap(objects) {
     objects.forEach((o) => {
       this.addToMap(o); // Die jeweiligen Objekte die oben definiert sind der Map hinzufügen
     });
   }
 
-
-
   // Fügt MovableObjects ins Canvas ein
   addToMap(mo) {
-
     if (mo.otherDirection) {
       // MoveableObject.andereRichtung
       this.flipImage(mo);
     }
 
-    mo.draw(this.ctx) 
+    mo.draw(this.ctx);
     mo.drawFrame(this.ctx);
 
     if (mo.otherDirection) {
       this.flipImageBack(mo);
     }
   }
-
 
   // Spiegelt das Bild
   flipImage(mo) {
@@ -96,7 +99,6 @@ class World {
     this.ctx.scale(-1, 1); // Bild spiegelverkehrt anzeigen
     mo.x = mo.x * -1; // Die X achse dreht sich
   }
-
 
   // Spiegelt es wieder zurück
   flipImageBack(mo) {

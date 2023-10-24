@@ -16,9 +16,10 @@ class DrawableObject {
   }
 
 
-  draw(ctx) {
-    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-  }
+  draw(ctx) { try {
+    ctx.drawImage(this.img, this.x, this.y, this.width, this.height); //Ansonsten normale Template zum Hinzufügen von Objekten zum canvas/der Map
+    } catch(e) {console.warn('Error loading image', e); console.log('Could not load image,', this.img);}
+}
 
 
   loadImages(array) {

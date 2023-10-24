@@ -29,6 +29,9 @@ window.addEventListener("keydown", (e) => {
     if(e.keyCode == 32) { // Spacetaste
         keyboard.SPACE = true;
     }
+    if(e.keyCode == 68) { // Rechte Pfeiltaste
+        keyboard.D = true;
+    }
 
 });
 
@@ -48,6 +51,9 @@ window.addEventListener("keyup", (e) => {
     }
     if(e.keyCode == 32) { // Spacetaste
         keyboard.SPACE = false;
+    }
+    if(e.keyCode == 68) { // Rechte Pfeiltaste
+        keyboard.D = false;
     }
 
 

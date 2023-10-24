@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,9 +17,10 @@
     <script src="models/level.class.js"></script>
     <script src="models/endboss.class.js"></script>
     <script src="levels/level1.js"></script>
+    <script src="models/throwable_object.class.js"></script>
     <script src="./js/game.js"></script>
-    
-    
+
+
 
     <title>El Pollo Loco</title>
 
@@ -26,11 +28,20 @@
 
 <body onload="init()">
 
-    <h1>El Pollo Loco</h1>
+    <div id="fullscreen">
 
-    <canvas id="canvas" width="720" height="480">
+        <h1 id="title">El Pollo Loco</h1>
 
-    </canvas>
+        <canvas id="canvas" width="720px" height="480px">
+
+        </canvas>
+        <div class="footer">
+            <p><b>Arrows Left/Right: Walk <br> Spacebar: Jump <br> D: Throw Salsa Bottle </b></p>
+            <button onclick="fullscreen(), exitFullscreen()">Fullscreen</button>
+        </div>
+
+    </div>
 
 </body>
+
 </html>
