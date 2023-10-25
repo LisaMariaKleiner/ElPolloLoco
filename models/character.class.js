@@ -117,7 +117,7 @@ class Character extends MoveableObject {
       if (this.isIdle()) {
         this.playAnimation(this.IMAGES_IDLE);
       }
-    }, 2500); // Wenn er 2 Sekunden nicht bewegt wird schläft er ein
+    }, 4000); // Wenn er 2 Sekunden nicht bewegt wird schläft er ein
   }
 
   jump() {
