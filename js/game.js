@@ -11,7 +11,6 @@ function init() {
 
 
   function startGame() {
-    
       let startscreen = document.getElementById("startscreen");
       let game = document.getElementById("game");
       startscreen.classList.add("d-none");

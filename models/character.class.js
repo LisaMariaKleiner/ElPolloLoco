@@ -123,4 +123,28 @@ class Character extends MoveableObject {
   jump() {
     this.speedY = 30;
   }
+
+
+  moveRight() {
+    this.x += this.speed;
+  }
+
+
+  isIdle() {
+    return (
+      (this.world.keyboard.RIGHT == false) &&
+      (this.world.keyboard.LEFT == false) &&
+      (this.world.keyboard.SPACE == false) &&
+      (this.world.keyboard.D == false)
+    );
+  }
+
+
+  isDead() {
+    return this.energy == 0;
+  }
+
+
+
+  
 }

@@ -7,6 +7,7 @@ class World {
   keyboard; // Tastatur
   camera_x = -100;
   statusBar = new StatusBar();
+  coinBar = new CoinBar();
   throwableObjects = [];
   coins = [];
 
@@ -55,6 +56,7 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
     // -------- Space for fixed objects --------
     this.addToMap(this.statusBar);
+    this.addToMap(this.coinBar);
     this.ctx.translate(this.camera_x, 0);
 
     this.addToMap(this.character);
