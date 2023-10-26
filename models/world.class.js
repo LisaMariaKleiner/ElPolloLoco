@@ -9,7 +9,7 @@ class World {
   statusBar = new StatusBar();
   coinBar = new CoinBar();
   throwableObjects = [];
-  coins = [];
+  
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -28,8 +28,10 @@ class World {
     setInterval(() => {
       this.checkCollisions();
       this.checkThrowObjects();
+      this.checkCollisionsWithCoins();
     }, 100);
   }
+
 
   checkThrowObjects() {
     if (this.keyboard.D) {
@@ -43,6 +45,15 @@ class World {
       if (this.character.isColliding(enemies)) {
         this.character.hit();
         this.statusBar.setPercentage(this.character.energy);
+      }
+    });
+  }
+
+  checkCollisionsWithCoins() {
+    this.level.coins.forEach((coin) => {
+      if (this.character.isCollidingWithCoin(coin)) {
+        this.character.hitCoins(coin); // Übergeben Sie die kollidierende Münze
+        this.coinBar.setCoinCounter(this.character.coins.length); // Verwenden Sie die Länge der Münzenliste
       }
     });
   }

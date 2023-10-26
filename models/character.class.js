@@ -144,7 +144,11 @@ class Character extends MoveableObject {
     return this.energy == 0;
   }
 
-
+  isHurt() {
+    let timepassed = new Date().getTime() - this.lastHit; // Differenz im ms
+    timepassed = timepassed / 1000; // Differenz in sek
+    return timepassed < 1;
+  }
 
   
 }

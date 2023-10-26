@@ -5,6 +5,7 @@ class MoveableObject extends DrawableObject {
   acceleration = 3;
   energy = 100;
   lastHit = 0;
+  coins = [];
 
   playAnimation(images) {
     let i = this.currentImage % images.length;
@@ -42,6 +43,16 @@ class MoveableObject extends DrawableObject {
     );
   }
 
+  // Charakter berührt Coin und gibt Daten zurück
+  isCollidingWithCoin(coin) {
+    return (
+      this.x + this.width >= coin.x &&
+      this.x <= coin.x &&
+      this.y <= coin.y &&
+      this.y + this.height >= coin.y
+    );
+  }
+
   // Character getroffen? Dann zieh Energy ab
   hit() {
     this.energy -= 5;
@@ -51,15 +62,18 @@ class MoveableObject extends DrawableObject {
       this.lastHit = new Date().getTime(); // Zeit vergangen in ms seit 01.01.1970
     }
   }
-  
 
-  isHurt() {
-    let timepassed = new Date().getTime() - this.lastHit; // Differenz im ms
-    timepassed = timepassed / 1000; // Differenz in sek
-    return timepassed < 1;
+  
+  hitCoins(coin) {
+    if (!this.coins.includes(coin)) {
+      this.coins.push(coin);
+    }
   }
 
   moveLeft() {
     this.x -= this.speed;
   }
+
+
+  
 }
