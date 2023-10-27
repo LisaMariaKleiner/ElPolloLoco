@@ -14,13 +14,16 @@ class DrawableObject {
   }
 
   draw(ctx) {
-    //try {
-      ctx.drawImage(this.img, this.x, this.y, this.width, this.height); //Ansonsten normale Template zum Hinzufügen von Objekten zum canvas/der Map
-    //} catch (e) {
-     // console.warn("Error loading image", e);
-      //console.log("Could not load image,", this.img);
-    //}
+    if (this.isImageLoaded()) {
+      ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    }
   }
+
+
+  isImageLoaded() {
+    return this.img && this.img.complete;
+  }
+  
 
   loadImages(array) {
     array.forEach((path) => {
@@ -40,4 +43,6 @@ class DrawableObject {
       ctx.stroke();
     }
   }
+
+  
 }

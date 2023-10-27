@@ -1,20 +1,26 @@
 class World {
-  // In JS Klassen bei Variablen weder const noch let davor
   character = new Character();
   level = level1;
   canvas;
-  ctx; // Sammlung von Kontext in Javascript
-  keyboard; // Tastatur
+  ctx;
+  keyboard;
   camera_x = -100;
   statusBar = new StatusBar();
-  coinBar = new CoinBar();
   throwableObjects = [];
-  
+
+  collectedCoins = []; // Behalten Sie diese Variable für die Liste der gesammelten Münzen
+  collectedCoinsCounter = 0; // Fügen Sie diese Variable hinzu, um die Anzahl der gesammelten Münzen zu zählen
+
+  collectedBottles = [];
+  collectedBottlesCounter = 0; 
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
+    
+    this.coinBar = new CoinBar(this.collectedCoins);
+    this.bottleBar = new BottleBar(this.collectedBottles);
     this.draw();
     this.setWorld();
     this.run();
@@ -32,10 +38,12 @@ class World {
     }, 100);
   }
 
-
   checkThrowObjects() {
     if (this.keyboard.D) {
-      let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+      let bottle = new ThrowableObject(
+        this.character.x + 100,
+        this.character.y + 100
+      );
       this.throwableObjects.push(bottle);
     }
   }
@@ -50,13 +58,28 @@ class World {
   }
 
   checkCollisionsWithCoins() {
+    let character = this.character;
+    let coinsToRemove = [];
+  
     this.level.coins.forEach((coin) => {
-      if (this.character.isCollidingWithCoin(coin)) {
-        this.character.hitCoins(coin); // Übergeben Sie die kollidierende Münze
-        this.coinBar.setCoinCounter(this.character.coins.length); // Verwenden Sie die Länge der Münzenliste
+      if (character.isCollidingWithCoin(coin)) {
+        coinsToRemove.push(coin);
       }
     });
+  
+    coinsToRemove.forEach((coin) => {
+      let index = this.level.coins.indexOf(coin);
+      if (index !== -1) {
+        this.level.coins.splice(index, 1);
+        this.collectedCoinsCounter++; // Inkrementieren Sie den Zähler für gesammelte Münzen.
+      }
+    });
+  
+    this.coinBar.setCoinCounter(this.collectedCoinsCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
   }
+  
+
+  
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas clearen!, sonst erscheint der Charakter mehrmals im Bildschirm
@@ -66,14 +89,17 @@ class World {
 
     this.ctx.translate(-this.camera_x, 0);
     // -------- Space for fixed objects --------
+    this.addToMap(this.bottleBar);
     this.addToMap(this.statusBar);
     this.addToMap(this.coinBar);
+    
     this.ctx.translate(this.camera_x, 0);
 
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.coins);
+    this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.throwableObjects);
 
     this.ctx.translate(-this.camera_x, 0);
@@ -85,6 +111,7 @@ class World {
       self.draw(); // self führt jetzt die Funktion draw() aus.
     });
   }
+  
 
   addObjectsToMap(objects) {
     objects.forEach((o) => {

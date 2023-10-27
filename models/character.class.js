@@ -5,6 +5,7 @@ class Character extends MoveableObject {
   speed = 4;
   world;
   walking_sound = new Audio("sounds/run.mp3");
+  coins;
 
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",

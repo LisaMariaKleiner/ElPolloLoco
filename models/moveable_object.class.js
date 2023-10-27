@@ -6,6 +6,7 @@ class MoveableObject extends DrawableObject {
   energy = 100;
   lastHit = 0;
   coins = [];
+  bottles = [];
 
   playAnimation(images) {
     let i = this.currentImage % images.length;
@@ -67,6 +68,7 @@ class MoveableObject extends DrawableObject {
   hitCoins(coin) {
     if (!this.coins.includes(coin)) {
       this.coins.push(coin);
+      console.log(coin);
     }
   }
 
