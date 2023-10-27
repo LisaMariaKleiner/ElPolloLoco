@@ -45,42 +45,48 @@ class Character extends MoveableObject {
   ];
 
   IMAGES_IDLE = [
-    'img/2_character_pepe/1_idle/idle/I-1.png',
-    'img/2_character_pepe/1_idle/idle/I-2.png',
-    'img/2_character_pepe/1_idle/idle/I-3.png',
-    'img/2_character_pepe/1_idle/idle/I-4.png',
-    'img/2_character_pepe/1_idle/idle/I-5.png',
-    'img/2_character_pepe/1_idle/idle/I-6.png',
-    'img/2_character_pepe/1_idle/idle/I-7.png',
-    'img/2_character_pepe/1_idle/idle/I-8.png',
-    'img/2_character_pepe/1_idle/idle/I-9.png',
-    'img/2_character_pepe/1_idle/idle/I-10.png',
-    'img/2_character_pepe/1_idle/long_idle/I-11.png',
-    'img/2_character_pepe/1_idle/long_idle/I-12.png',
-    'img/2_character_pepe/1_idle/long_idle/I-13.png',
-    'img/2_character_pepe/1_idle/long_idle/I-14.png',
-    'img/2_character_pepe/1_idle/long_idle/I-15.png',
-    'img/2_character_pepe/1_idle/long_idle/I-16.png',
-    'img/2_character_pepe/1_idle/long_idle/I-17.png',
-    'img/2_character_pepe/1_idle/long_idle/I-18.png',
-    'img/2_character_pepe/1_idle/long_idle/I-19.png',
-    'img/2_character_pepe/1_idle/long_idle/I-20.png',
-];
-
+    "img/2_character_pepe/1_idle/idle/I-1.png",
+    "img/2_character_pepe/1_idle/idle/I-2.png",
+    "img/2_character_pepe/1_idle/idle/I-3.png",
+    "img/2_character_pepe/1_idle/idle/I-4.png",
+    "img/2_character_pepe/1_idle/idle/I-5.png",
+    "img/2_character_pepe/1_idle/idle/I-6.png",
+    "img/2_character_pepe/1_idle/idle/I-7.png",
+    "img/2_character_pepe/1_idle/idle/I-8.png",
+    "img/2_character_pepe/1_idle/idle/I-9.png",
+    "img/2_character_pepe/1_idle/idle/I-10.png",
+    "img/2_character_pepe/1_idle/long_idle/I-11.png",
+    "img/2_character_pepe/1_idle/long_idle/I-12.png",
+    "img/2_character_pepe/1_idle/long_idle/I-13.png",
+    "img/2_character_pepe/1_idle/long_idle/I-14.png",
+    "img/2_character_pepe/1_idle/long_idle/I-15.png",
+    "img/2_character_pepe/1_idle/long_idle/I-16.png",
+    "img/2_character_pepe/1_idle/long_idle/I-17.png",
+    "img/2_character_pepe/1_idle/long_idle/I-18.png",
+    "img/2_character_pepe/1_idle/long_idle/I-19.png",
+    "img/2_character_pepe/1_idle/long_idle/I-20.png",
+  ];
 
   // Constructor wird zuerst ausgeführt!
   constructor() {
-    super().loadImage("img/2_character_pepe/2_walk/W-21.png"); // muss nur 1x geschrieben werden
+    super().loadImage("img/2_character_pepe/2_walk/W-21.png");
     this.loadImages(this.IMAGES_WALKING); //greift auf die Bilder im Array zu (IMAGES_WALKING)
-    this.loadImages(this.IMAGES_JUMPING); // Bilder vom Springen im Array zu (IMAGES_JUMPING)
-    this.loadImages(this.IMAGES_HURT); // Bilder vom Springen im Array zu (IMAGES_HURT)
-    this.loadImages(this.IMAGES_DEAD); // Bilder vom Springen im Array zu (IMAGES_DEAD)
+    this.loadImages(this.IMAGES_JUMPING);
+    this.loadImages(this.IMAGES_HURT);
+    this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_IDLE);
     this.applyGravity();
     this.animate();
   }
 
+
   animate() {
+    let isDeadAnimationPlayed = false;
+    let isFlyingAnimationPlayed = false;
+    let flyingSpeedX = 3; // Horizontale Geschwindigkeit
+    let flyingSpeedY = 5; // Vertikale Geschwindigkeit
+    
+
     setInterval(() => {
       this.walking_sound.pause();
 
@@ -94,21 +100,25 @@ class Character extends MoveableObject {
         this.otherDirection = true; // Bild gespiegelt
         this.walking_sound.play();
       }
-      if (this.world.keyboard.SPACE && !this.isInAir()) {
+      if (this.world.keyboard.SPACE && !this.isInAir()) { 
         this.jump();
       }
       this.world.camera_x = -this.x + 100;
     }, 1000 / 60);
 
     setInterval(() => {
-      // Eine Intervallfunktion für den Bewegungsablauf
-
-      if (this.isDead()) {
+      if (this.isDead() && !isDeadAnimationPlayed) {
         this.playAnimation(this.IMAGES_DEAD);
+        isDeadAnimationPlayed = true;
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
-      } else if (this.isInAir()) {
-        this.playAnimation(this.IMAGES_JUMPING);
+      } else if (
+        this.isInAir() &&
+        isDeadAnimationPlayed &&
+        !isFlyingAnimationPlayed
+      ) {
+        this.playAnimation(this.IMAGES_DEAD);
+        isFlyingAnimationPlayed = true;
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         this.playAnimation(this.IMAGES_WALKING);
       }
@@ -119,7 +129,17 @@ class Character extends MoveableObject {
         this.playAnimation(this.IMAGES_IDLE);
       }
     }, 4000); // Wenn er 2 Sekunden nicht bewegt wird schläft er ein
+
+    setInterval(() => {
+      if (isDeadAnimationPlayed && isFlyingAnimationPlayed) {
+        this.x += flyingSpeedX; // Bewege den Charakter nach rechts
+        this.y += flyingSpeedY; // Bewege den Charakter nach unten
+      }
+    }, 1000 / 60);
+    
   }
+
+
 
   jump() {
     this.speedY = 30;
@@ -131,25 +151,27 @@ class Character extends MoveableObject {
   }
 
 
+
   isIdle() {
     return (
-      (this.world.keyboard.RIGHT == false) &&
-      (this.world.keyboard.LEFT == false) &&
-      (this.world.keyboard.SPACE == false) &&
-      (this.world.keyboard.D == false)
+      this.world.keyboard.RIGHT == false &&
+      this.world.keyboard.LEFT == false &&
+      this.world.keyboard.SPACE == false &&
+      this.world.keyboard.D == false
     );
   }
+
 
 
   isDead() {
     return this.energy == 0;
   }
 
+
+  
   isHurt() {
     let timepassed = new Date().getTime() - this.lastHit; // Differenz im ms
     timepassed = timepassed / 1000; // Differenz in sek
     return timepassed < 1;
   }
-
-  
 }

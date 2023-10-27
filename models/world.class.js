@@ -10,11 +10,11 @@ class World {
   bottleBar = new BottleBar(this.collectedBottles);
   throwableObjects = [];
 
-  collectedCoins = []; // Behalten Sie diese Variable für die Liste der gesammelten Münzen
-  collectedCoinsCounter = 0; // Fügen Sie diese Variable hinzu, um die Anzahl der gesammelten Münzen zu zählen
+  collectedCoins = []; // gesammelte Münzen
+  collectedCoinsCounter = 0; // Zähler für gesammelte Münzen
 
   collectedBottles = [];
-  collectedBottlesCounter = 0; 
+  collectedBottlesCounter = 0;
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -25,11 +25,9 @@ class World {
     this.run();
   }
 
-
   setWorld() {
     this.character.world = this;
   }
-
 
   run() {
     setInterval(() => {
@@ -37,9 +35,9 @@ class World {
       this.checkThrowObjects();
       this.checkCollisionsWithCoins();
       this.checkCollisionsWithBottles();
+      this.checkCollisionsBottleAndChicken();
     }, 100);
   }
-
 
   checkThrowObjects() {
     if (this.keyboard.D && this.collectedBottlesCounter > 0) {
@@ -51,10 +49,8 @@ class World {
       this.collectedBottlesCounter--; // Inkrementieren Sie den Zähler für gesammelte Münzen
     }
     this.bottleBar.setBottleCounter(this.collectedBottlesCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
-
   }
 
- 
   checkCollisions() {
     this.level.enemies.forEach((enemies) => {
       if (this.character.isColliding(enemies)) {
@@ -64,17 +60,37 @@ class World {
     });
   }
 
+  checkCollisionsBottleAndChicken() {
+    this.throwableObjects.forEach((bottle) => {
+      this.level.enemies.forEach((enemy) => {
+        if (this.bottleCollidingWithChicken(bottle, enemy)) {
+          console.log(enemy); 
+          enemy.chickenIsDead();
+        }
+      });
+    });
+  }
+
+  bottleCollidingWithChicken(bottle, enemies) {
+    return (
+    bottle.x + bottle.width >= enemies.x &&
+    bottle.x <= enemies.x + enemies.width &&
+    bottle.y + bottle.height >= enemies.y &&
+    bottle.y <= enemies.y + enemies.height
+    );
+  }
+  
 
   checkCollisionsWithCoins() {
     let character = this.character;
     let coinsToRemove = [];
-  
+
     this.level.coins.forEach((coin) => {
-      if (character.isCollidingWithCoin(coin)) {
+      if (character.isColliding(coin)) {
         coinsToRemove.push(coin);
       }
     });
-  
+
     coinsToRemove.forEach((coin) => {
       let index = this.level.coins.indexOf(coin);
       if (index !== -1) {
@@ -82,21 +98,20 @@ class World {
         this.collectedCoinsCounter++; // Inkrementieren Sie den Zähler für gesammelte Münzen.
       }
     });
-  
+
     this.coinBar.setCoinCounter(this.collectedCoinsCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
   }
-
 
   checkCollisionsWithBottles() {
     let character = this.character;
     let bottlesToRemove = [];
-  
+
     this.level.bottles.forEach((bottle) => {
-      if (character.isCollidingWithBottle(bottle)) {
+      if (character.isColliding(bottle)) {
         bottlesToRemove.push(bottle);
       }
     });
-  
+
     bottlesToRemove.forEach((bottle) => {
       let index = this.level.bottles.indexOf(bottle);
       if (index !== -1) {
@@ -104,12 +119,9 @@ class World {
         this.collectedBottlesCounter++; // Inkrementieren Sie den Zähler für gesammelte Münzen.
       }
     });
-  
+
     this.bottleBar.setBottleCounter(this.collectedBottlesCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
   }
-  
-
-  
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas clearen!, sonst erscheint der Charakter mehrmals im Bildschirm
@@ -122,14 +134,15 @@ class World {
     this.addToMap(this.bottleBar);
     this.addToMap(this.statusBar);
     this.addToMap(this.coinBar);
-    
+
     this.ctx.translate(this.camera_x, 0);
 
     this.addToMap(this.character);
+    this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.coins);
-    this.addObjectsToMap(this.level.bottles);
+    
     this.addObjectsToMap(this.throwableObjects);
 
     this.ctx.translate(-this.camera_x, 0);
@@ -141,7 +154,6 @@ class World {
       self.draw(); // self führt jetzt die Funktion draw() aus.
     });
   }
-  
 
   addObjectsToMap(objects) {
     objects.forEach((o) => {

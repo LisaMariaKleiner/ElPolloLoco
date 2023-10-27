@@ -35,34 +35,15 @@ class MoveableObject extends DrawableObject {
   }
 
   // Charakter kollidiert mit Chicken?
-  isColliding(enemy) {
+  isColliding(mo) {
     return (
-      this.x + this.width >= enemy.x &&
-      this.x <= enemy.x &&
-      this.y <= enemy.y &&
-      this.y + this.height >= enemy.y
+      this.x + this.width >= mo.x &&
+      this.x <= mo.x &&
+      this.y <= mo.y &&
+      this.y + this.height >= mo.y
     );
   }
-
-  // Charakter berührt Coin und gibt Daten zurück
-  isCollidingWithCoin(coin) {
-    return (
-      this.x + this.width >= coin.x &&
-      this.x <= coin.x &&
-      this.y <= coin.y &&
-      this.y + this.height >= coin.y
-    );
-  }
-
-
-  isCollidingWithBottle(bottle) {
-    return (
-      this.x + this.width >= bottle.x &&
-      this.x <= bottle.x &&
-      this.y <= bottle.y &&
-      this.y + this.height >= bottle.y
-    );
-  }
+  
 
   // Character getroffen? Dann zieh Energy ab
   hit() {
@@ -71,6 +52,7 @@ class MoveableObject extends DrawableObject {
       this.energy = 0;
     } else {
       this.lastHit = new Date().getTime(); // Zeit vergangen in ms seit 01.01.1970
+     
     }
   }
 
