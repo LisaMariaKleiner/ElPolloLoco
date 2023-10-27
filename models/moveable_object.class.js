@@ -86,7 +86,7 @@ class MoveableObject extends DrawableObject {
   hitBottle(bottle) {
     if (!this.coins.includes(bottle)) {
       this.coins.push(bottle);
-      console.log(bottle);
+      //console.log(bottle);
     }
   }
 

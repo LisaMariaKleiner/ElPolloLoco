@@ -25,9 +25,11 @@ class World {
     this.run();
   }
 
+
   setWorld() {
     this.character.world = this;
   }
+
 
   run() {
     setInterval(() => {
@@ -38,16 +40,21 @@ class World {
     }, 100);
   }
 
+
   checkThrowObjects() {
-    if (this.keyboard.D) {
+    if (this.keyboard.D && this.collectedBottlesCounter > 0) {
       let bottle = new ThrowableObject(
         this.character.x + 100,
         this.character.y + 100
       );
       this.throwableObjects.push(bottle);
+      this.collectedBottlesCounter--; // Inkrementieren Sie den Zähler für gesammelte Münzen
     }
+    this.bottleBar.setBottleCounter(this.collectedBottlesCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
+
   }
 
+ 
   checkCollisions() {
     this.level.enemies.forEach((enemies) => {
       if (this.character.isColliding(enemies)) {
@@ -56,6 +63,7 @@ class World {
       }
     });
   }
+
 
   checkCollisionsWithCoins() {
     let character = this.character;
