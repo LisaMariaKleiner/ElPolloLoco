@@ -7,26 +7,26 @@ class BottleBar extends DrawableObject {
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/60.png',
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/80.png',
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png',
-
     ];
 
     bottleCounter = 0; //Initialisiere den BottleCounter auf 0
     
     constructor(collectedBottles) {
         super();
+        this.collectedBottles = collectedBottles;
         this.loadImages(this.IMAGES_Bottlebar);
         this.x = 20;
-        this.y = 30;
+        this.y = 70;
         this.width = 200;
         this.height = 50;
         this.setBottleCounter();
-        this.collectedBottles = collectedBottles;
+        
     }
 
 
     setBottleCounter(counter){
-        this.BottleCounter = counter;
-        let path = this.IMAGES_Bottlebar[this.resolveImageIndexBottle];
+        this.bottleCounter = counter;
+        let path = this.IMAGES_Bottlebar[this.resolveImageIndexBottle(counter)];
         this.img = this.imageCache[path];
     } 
 

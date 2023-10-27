@@ -6,6 +6,8 @@ class World {
   keyboard;
   camera_x = -100;
   statusBar = new StatusBar();
+  coinBar = new CoinBar(this.collectedCoins);
+  bottleBar = new BottleBar(this.collectedBottles);
   throwableObjects = [];
 
   collectedCoins = []; // Behalten Sie diese Variable für die Liste der gesammelten Münzen
@@ -18,9 +20,6 @@ class World {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
-    
-    this.coinBar = new CoinBar(this.collectedCoins);
-    this.bottleBar = new BottleBar(this.collectedBottles);
     this.draw();
     this.setWorld();
     this.run();
@@ -35,6 +34,7 @@ class World {
       this.checkCollisions();
       this.checkThrowObjects();
       this.checkCollisionsWithCoins();
+      this.checkCollisionsWithBottles();
     }, 100);
   }
 
@@ -76,6 +76,28 @@ class World {
     });
   
     this.coinBar.setCoinCounter(this.collectedCoinsCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
+  }
+
+
+  checkCollisionsWithBottles() {
+    let character = this.character;
+    let bottlesToRemove = [];
+  
+    this.level.bottles.forEach((bottle) => {
+      if (character.isCollidingWithBottle(bottle)) {
+        bottlesToRemove.push(bottle);
+      }
+    });
+  
+    bottlesToRemove.forEach((bottle) => {
+      let index = this.level.bottles.indexOf(bottle);
+      if (index !== -1) {
+        this.level.bottles.splice(index, 1);
+        this.collectedBottlesCounter++; // Inkrementieren Sie den Zähler für gesammelte Münzen.
+      }
+    });
+  
+    this.bottleBar.setBottleCounter(this.collectedBottlesCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
   }
   
 

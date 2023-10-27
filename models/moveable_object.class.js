@@ -54,6 +54,16 @@ class MoveableObject extends DrawableObject {
     );
   }
 
+
+  isCollidingWithBottle(bottle) {
+    return (
+      this.x + this.width >= bottle.x &&
+      this.x <= bottle.x &&
+      this.y <= bottle.y &&
+      this.y + this.height >= bottle.y
+    );
+  }
+
   // Character getroffen? Dann zieh Energy ab
   hit() {
     this.energy -= 5;
@@ -69,6 +79,14 @@ class MoveableObject extends DrawableObject {
     if (!this.coins.includes(coin)) {
       this.coins.push(coin);
       console.log(coin);
+    }
+  }
+
+
+  hitBottle(bottle) {
+    if (!this.coins.includes(bottle)) {
+      this.coins.push(bottle);
+      console.log(bottle);
     }
   }
 
