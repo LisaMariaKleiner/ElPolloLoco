@@ -25,11 +25,11 @@ class Chicken extends MoveableObject {
 
   constructor(isBackChicken = false) {
     super().loadImage(this.IMAGES_WALKING[0]);
-    this.loadImages(this.IMAGES_WALKING); //greift auf die Bilder im Array zu (IMAGES_WALKING)
+    this.loadImages(this.IMAGES_WALKING); 
     this.loadImages(this.IMAGES_CHICKEN_DEAD);
 
     if (isBackChicken) {
-      this.x = 1200 + Math.random() * 1000; // Startpunkt px + zufällig generierte Zahl + 500 (Px zwischen 0 und 500)
+      this.x = 1200 + Math.random() * 1000; 
     } else {
       this.x = 800 + Math.random() * 700;
     }
@@ -47,5 +47,5 @@ class Chicken extends MoveableObject {
   chickenIsDead() {
     clearInterval(this.walkingChickenInterval);
     this.playAnimation(this.IMAGES_CHICKEN_DEAD);
-  }
+   }
 }

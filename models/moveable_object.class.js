@@ -43,6 +43,7 @@ class MoveableObject extends DrawableObject {
       this.y + this.height >= mo.y
     );
   }
+
   
 
   // Character getroffen? Dann zieh Energy ab
@@ -52,18 +53,15 @@ class MoveableObject extends DrawableObject {
       this.energy = 0;
     } else {
       this.lastHit = new Date().getTime(); // Zeit vergangen in ms seit 01.01.1970
-     
     }
   }
 
-  
   hitCoins(coin) {
     if (!this.coins.includes(coin)) {
       this.coins.push(coin);
       console.log(coin);
     }
   }
-
 
   hitBottle(bottle) {
     if (!this.coins.includes(bottle)) {
@@ -75,7 +73,4 @@ class MoveableObject extends DrawableObject {
   moveLeft() {
     this.x -= this.speed;
   }
-
-
-  
 }

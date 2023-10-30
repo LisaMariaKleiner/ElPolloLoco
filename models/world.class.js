@@ -36,6 +36,7 @@ class World {
       this.checkCollisionsWithCoins();
       this.checkCollisionsWithBottles();
       this.checkCollisionsBottleAndChicken();
+      this.checkCollisionsTopOfChicken();
     }, 100);
   }
 
@@ -52,10 +53,15 @@ class World {
   }
 
   checkCollisions() {
-    this.level.enemies.forEach((enemies) => {
-      if (this.character.isColliding(enemies)) {
-        this.character.hit();
-        this.statusBar.setPercentage(this.character.energy);
+    this.level.enemies.forEach((enemy, index) => {
+      if (this.character.isColliding(enemy)) {
+        if (this.character.isInAir()) {
+          this.character.jump(); 
+          this.level.enemies.splice(index, 1); 
+        } else {
+          this.character.hit();
+          this.statusBar.setPercentage(this.character.energy);
+        }
       }
     });
   }
@@ -64,22 +70,45 @@ class World {
     this.throwableObjects.forEach((bottle) => {
       this.level.enemies.forEach((enemy) => {
         if (this.bottleCollidingWithChicken(bottle, enemy)) {
-          console.log(enemy); 
           enemy.chickenIsDead();
         }
       });
     });
   }
 
+  /*checkCollisionsTopOfChicken() {
+    for (let i = this.level.enemies.length - 1; i >= 0; i--) {
+      const enemy = this.level.enemies[i];
+      if (this.isCollidingTopOfChicken(this.character, enemy)) {
+        enemy.chickenIsDead();
+        this.level.enemies.splice(i, 1); // Entfernen Sie das Chicken aus der Liste der Feinde
+      }
+    }
+  }*/
+
+  isCollidingTopOfChicken(character, chicken) {
+    // Überprüfen, ob die rechte Seite des Character nicht links von der linken Seite des Chicken ist
+    let notCollidingOnX =
+      character.x + character.width < chicken.x ||
+      character.x > chicken.x + chicken.width;
+    // Überprüfen, ob die untere Seite des Character nicht über der oberen Seite des Chicken ist
+    let notCollidingOnY = character.y + character.height < chicken.y;
+    // Überprüfen, ob die obere Seite des Character unter der oberen Seite des Chicken ist und die untere Seite des Character über der unteren Seite des Chicken ist.
+    let topCollidingOnY =
+      character.y + character.height >= chicken.y &&
+      character.y <= chicken.y + chicken.height;
+    // Nur wenn auf der X-Achse keine Kollision stattfindet und auf der Y-Achse der untere Teil des Character den oberen Teil des Chicken berührt, erfolgt eine Kollision
+    return !(notCollidingOnX || notCollidingOnY) && topCollidingOnY;
+  }
+
   bottleCollidingWithChicken(bottle, enemies) {
     return (
-    bottle.x + bottle.width >= enemies.x &&
-    bottle.x <= enemies.x + enemies.width &&
-    bottle.y + bottle.height >= enemies.y &&
-    bottle.y <= enemies.y + enemies.height
+      bottle.x + bottle.width >= enemies.x &&
+      bottle.x <= enemies.x + enemies.width &&
+      bottle.y + bottle.height >= enemies.y &&
+      bottle.y <= enemies.y + enemies.height
     );
   }
-  
 
   checkCollisionsWithCoins() {
     let character = this.character;
@@ -142,7 +171,7 @@ class World {
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.coins);
-    
+
     this.addObjectsToMap(this.throwableObjects);
 
     this.ctx.translate(-this.camera_x, 0);
