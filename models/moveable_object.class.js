@@ -44,6 +44,16 @@ class MoveableObject extends DrawableObject {
     );
   }
 
+
+  /*hitBoss() {
+    this.bossEnergy -= 20;
+    if (this.bossEnergy < 0) {
+      this.bossEnergy = 0;
+    } else {
+      this.lastHit = new Date().getTime(); // Zeit vergangen in ms seit 01.01.1970
+    }
+  }*/
+  
   
 
   // Character getroffen? Dann zieh Energy ab

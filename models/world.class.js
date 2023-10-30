@@ -19,6 +19,7 @@ class World {
   collectedBottlesCounter = 0;
 
   bossBar = new BossBar();
+  endBoss = level1.enemies[0];
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -72,6 +73,19 @@ class World {
   }
 
 
+ /* hitBossWithBottle() {
+    this.throwableObject.forEach((bottle) => {
+        if (this.endBossboss.isColliding(bottle)) {
+            bottle.bottleHitsBoss = true;
+            this.endBossboss.hitBoss();
+            this.bossBar.setBossPercentage(this.endBossboss.bossEnergy);
+            this.boss.lifeEnergy -= 15;
+            this.deleteThrownBottle();
+        }
+    });
+}*/
+  
+
   checkCollisionsBottleAndChicken() {
     this.throwableObjects.forEach((bottle) => {
       this.level.enemies.forEach((enemy, index) => {
@@ -83,30 +97,6 @@ class World {
     });
   }
 
-
-  isCollidingTopOfChicken(character, chicken) {
-    // Überprüfen, ob die rechte Seite des Character nicht links von der linken Seite des Chicken ist
-    let notCollidingOnX =
-      character.x + character.width < chicken.x ||
-      character.x > chicken.x + chicken.width;
-    // Überprüfen, ob die untere Seite des Character nicht über der oberen Seite des Chicken ist
-    let notCollidingOnY = character.y + character.height < chicken.y;
-    // Überprüfen, ob die obere Seite des Character unter der oberen Seite des Chicken ist und die untere Seite des Character über der unteren Seite des Chicken ist.
-    let topCollidingOnY =
-      character.y + character.height >= chicken.y &&
-      character.y <= chicken.y + chicken.height;
-    // Nur wenn auf der X-Achse keine Kollision stattfindet und auf der Y-Achse der untere Teil des Character den oberen Teil des Chicken berührt, erfolgt eine Kollision
-    return !(notCollidingOnX || notCollidingOnY) && topCollidingOnY;
-  }
-
-  bottleCollidingWithChicken(bottle, enemies) {
-    return (
-      bottle.x + bottle.width >= enemies.x &&
-      bottle.x <= enemies.x + enemies.width &&
-      bottle.y + bottle.height >= enemies.y &&
-      bottle.y <= enemies.y + enemies.height
-    );
-  }
 
   checkCollisionsWithCoins() {
     let character = this.character;
@@ -150,6 +140,31 @@ class World {
     this.bottleBar.setBottleCounter(this.collectedBottlesCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
   }
 
+
+  isCollidingTopOfChicken(character, chicken) {
+    // Überprüfen, ob die rechte Seite des Character nicht links von der linken Seite des Chicken ist
+    let notCollidingOnX =
+      character.x + character.width < chicken.x ||
+      character.x > chicken.x + chicken.width;
+    // Überprüfen, ob die untere Seite des Character nicht über der oberen Seite des Chicken ist
+    let notCollidingOnY = character.y + character.height < chicken.y;
+    // Überprüfen, ob die obere Seite des Character unter der oberen Seite des Chicken ist und die untere Seite des Character über der unteren Seite des Chicken ist.
+    let topCollidingOnY =
+      character.y + character.height >= chicken.y &&
+      character.y <= chicken.y + chicken.height;
+    // Nur wenn auf der X-Achse keine Kollision stattfindet und auf der Y-Achse der untere Teil des Character den oberen Teil des Chicken berührt, erfolgt eine Kollision
+    return !(notCollidingOnX || notCollidingOnY) && topCollidingOnY;
+  }
+
+  bottleCollidingWithChicken(bottle, enemies) {
+    return (
+      bottle.x + bottle.width >= enemies.x &&
+      bottle.x <= enemies.x + enemies.width &&
+      bottle.y + bottle.height >= enemies.y &&
+      bottle.y <= enemies.y + enemies.height
+    );
+  }
+
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas clearen!, sonst erscheint der Charakter mehrmals im Bildschirm
 
@@ -170,6 +185,7 @@ class World {
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.coins);
+    this.addObjectsToMap(this.level.endBoss);
 
     this.addObjectsToMap(this.throwableObjects);
     this.addToMap(this.bossBar);
