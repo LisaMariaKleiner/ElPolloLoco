@@ -8,6 +8,8 @@ class World {
   statusBar = new StatusBar();
   coinBar = new CoinBar(this.collectedCoins);
   bottleBar = new BottleBar(this.collectedBottles);
+ 
+
   throwableObjects = [];
 
   collectedCoins = []; // gesammelte Münzen
@@ -15,6 +17,8 @@ class World {
 
   collectedBottles = [];
   collectedBottlesCounter = 0;
+
+  bossBar = new BossBar();
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -36,9 +40,9 @@ class World {
       this.checkCollisionsWithCoins();
       this.checkCollisionsWithBottles();
       this.checkCollisionsBottleAndChicken();
-      this.checkCollisionsTopOfChicken();
     }, 100);
   }
+
 
   checkThrowObjects() {
     if (this.keyboard.D && this.collectedBottlesCounter > 0) {
@@ -51,6 +55,7 @@ class World {
     }
     this.bottleBar.setBottleCounter(this.collectedBottlesCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
   }
+
 
   checkCollisions() {
     this.level.enemies.forEach((enemy, index) => {
@@ -66,25 +71,18 @@ class World {
     });
   }
 
+
   checkCollisionsBottleAndChicken() {
     this.throwableObjects.forEach((bottle) => {
-      this.level.enemies.forEach((enemy) => {
+      this.level.enemies.forEach((enemy, index) => {
         if (this.bottleCollidingWithChicken(bottle, enemy)) {
           enemy.chickenIsDead();
+          this.level.enemies.splice(index, 1); 
         }
       });
     });
   }
 
-  /*checkCollisionsTopOfChicken() {
-    for (let i = this.level.enemies.length - 1; i >= 0; i--) {
-      const enemy = this.level.enemies[i];
-      if (this.isCollidingTopOfChicken(this.character, enemy)) {
-        enemy.chickenIsDead();
-        this.level.enemies.splice(i, 1); // Entfernen Sie das Chicken aus der Liste der Feinde
-      }
-    }
-  }*/
 
   isCollidingTopOfChicken(character, chicken) {
     // Überprüfen, ob die rechte Seite des Character nicht links von der linken Seite des Chicken ist
@@ -163,6 +161,7 @@ class World {
     this.addToMap(this.bottleBar);
     this.addToMap(this.statusBar);
     this.addToMap(this.coinBar);
+    
 
     this.ctx.translate(this.camera_x, 0);
 
@@ -173,6 +172,7 @@ class World {
     this.addObjectsToMap(this.level.coins);
 
     this.addObjectsToMap(this.throwableObjects);
+    this.addToMap(this.bossBar);
 
     this.ctx.translate(-this.camera_x, 0);
 
@@ -184,11 +184,13 @@ class World {
     });
   }
 
+
   addObjectsToMap(objects) {
     objects.forEach((o) => {
       this.addToMap(o); // Die jeweiligen Objekte die oben definiert sind der Map hinzufügen
     });
   }
+
 
   // Fügt MovableObjects ins Canvas ein
   addToMap(mo) {
@@ -204,6 +206,7 @@ class World {
       this.flipImageBack(mo);
     }
   }
+
 
   // Spiegelt das Bild
   flipImage(mo) {
