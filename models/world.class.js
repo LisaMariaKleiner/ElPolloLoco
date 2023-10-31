@@ -1,5 +1,6 @@
 class World {
   character = new Character();
+  endBoss;
   level = level1;
   canvas;
   ctx;
@@ -8,7 +9,6 @@ class World {
   statusBar = new StatusBar();
   coinBar = new CoinBar(this.collectedCoins);
   bottleBar = new BottleBar(this.collectedBottles);
- 
 
   throwableObjects = [];
 
@@ -19,7 +19,6 @@ class World {
   collectedBottlesCounter = 0;
 
   bossBar = new BossBar();
-
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -45,26 +44,25 @@ class World {
     }, 100);
   }
 
-
   checkThrowObjects() {
     if (this.keyboard.D && this.collectedBottlesCounter > 0) {
       let bottle = new ThrowableObject(
         this.character.x + 100,
         this.character.y + 100
       );
+      bottle.hitBoss = false;
       this.throwableObjects.push(bottle);
       this.collectedBottlesCounter--; // Inkrementieren Sie den Zähler für gesammelte Münzen
     }
     this.bottleBar.setBottleCounter(this.collectedBottlesCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
   }
 
-
   checkCollisions() {
     this.level.enemies.forEach((enemy, index) => {
       if (this.character.isColliding(enemy)) {
         if (this.character.isInAir()) {
-          this.character.jump(); 
-          this.level.enemies.splice(index, 1); 
+          this.character.jump();
+          this.level.enemies.splice(index, 1);
         } else {
           this.character.hit();
           this.statusBar.setPercentage(this.character.energy);
@@ -73,30 +71,30 @@ class World {
     });
   }
 
-
   checkHitBossWithBottle() {
     this.throwableObjects.forEach((bottle) => {
-      if (this.bottleCollidingWithChicken(bottle, this.level1.endBoss)) {
+      if (this.bottleCollidingWithChicken(bottle, this.level.endBoss[0])) {
         console.log("Bottle Colliding with endboss");
-        this.endBoss.hitBoss();
-        this.bossBar.setBossPercentage(this.endBoss.bossEnergy);
-
+        if (!bottle.hitBoss) {
+          this.level.endBoss[0].hitBoss();
+          bottle.hitBoss = true; // Markiere die Flasche als getroffen
+          console.log(`Energy=`, this.level.endBoss[0].bossEnergy);
+          this.bossBar.setBossPercentage(this.level.endBoss[0].bossEnergy);
+        }
       }
     });
   }
-  
 
   checkCollisionsBottleAndChicken() {
     this.throwableObjects.forEach((bottle) => {
       this.level.enemies.forEach((enemy, index) => {
         if (this.bottleCollidingWithChicken(bottle, enemy)) {
           enemy.chickenIsDead();
-          this.level.enemies.splice(index, 1); 
+          this.level.enemies.splice(index, 1);
         }
       });
     });
   }
-
 
   checkCollisionsWithCoins() {
     let character = this.character;
@@ -140,7 +138,6 @@ class World {
     this.bottleBar.setBottleCounter(this.collectedBottlesCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
   }
 
-
   isCollidingTopOfChicken(character, chicken) {
     // Überprüfen, ob die rechte Seite des Character nicht links von der linken Seite des Chicken ist
     let notCollidingOnX =
@@ -176,7 +173,6 @@ class World {
     this.addToMap(this.bottleBar);
     this.addToMap(this.statusBar);
     this.addToMap(this.coinBar);
-    
 
     this.ctx.translate(this.camera_x, 0);
 
@@ -200,13 +196,11 @@ class World {
     });
   }
 
-
   addObjectsToMap(objects) {
     objects.forEach((o) => {
       this.addToMap(o); // Die jeweiligen Objekte die oben definiert sind der Map hinzufügen
     });
   }
-
 
   // Fügt MovableObjects ins Canvas ein
   addToMap(mo) {
@@ -222,7 +216,6 @@ class World {
       this.flipImageBack(mo);
     }
   }
-
 
   // Spiegelt das Bild
   flipImage(mo) {

@@ -38,13 +38,13 @@ class Endboss extends MoveableObject {
     "img/4_enemie_boss_chicken/3_attack/G20.png",
   ];
 
-  IMAGES_HURT = [
+  IMAGES_BOSS_HURT = [
     "img/4_enemie_boss_chicken/4_hurt/G21.png",
     "img/4_enemie_boss_chicken/4_hurt/G22.png",
     "img/4_enemie_boss_chicken/4_hurt/G23.png",
   ];
 
-  IMAGES_DEAD = [
+  IMAGES_BOSS_DEAD = [
     "img/4_enemie_boss_chicken/5_dead/G24.png",
     "img/4_enemie_boss_chicken/5_dead/G25.png",
     "img/4_enemie_boss_chicken/5_dead/G26.png",
@@ -52,12 +52,11 @@ class Endboss extends MoveableObject {
 
   constructor() {
     super();
-    //this.loadImages(this.IMAGES_BOSS_WALKING); 
-    this.loadImages(this.IMAGES_BOSS_ALERT); 
-    //this.loadImages(this.IMAGES_ATACKING); 
-    //this.loadImages(this.IMAGES_DEAD); 
-   
-    //this.loadImages(this.IMAGES_HURT);
+    this.loadImages(this.IMAGES_BOSS_ALERT);
+    this.loadImages(this.IMAGES_BOSS_DEAD);
+    this.loadImages(this.IMAGES_BOSS_HURT);
+    //this.loadImages(this.IMAGES_ATACKING);
+    //this.loadImages(this.IMAGES_BOSS_WALKING);
     this.bossEnergy = 100;
     this.speed = 7;
     this.x = 2000;
@@ -66,14 +65,25 @@ class Endboss extends MoveableObject {
 
   animate() {
     setInterval(() => {
-        this.playAnimation(this.IMAGES_BOSS_ALERT);
+      this.playAnimation(this.IMAGES_BOSS_ALERT);
     }, 500);
-  }
 
+    setInterval(() => {
+      if (this.endbossIsHurt()) {
+        this.playAnimation(this.IMAGES_BOSS_HURT);
+      } else if (this.bossIsDead()) {
+        this.playAnimation(this.IMAGES_BOSS_DEAD);
+      }
+    }, 150);
+  }
 
   bossIsDead() {
     return this.bossEnergy == 0;
   }
 
-
+  endbossIsHurt() {
+    let bosstimepassed = new Date().getTime() - this.lastBossHit; // Differenz im ms
+    bosstimepassed = bosstimepassed / 1000; // Differenz in sek
+    return bosstimepassed < 1;
+  }
 }
