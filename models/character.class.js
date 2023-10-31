@@ -106,6 +106,8 @@ class Character extends MoveableObject {
       this.world.camera_x = -this.x + 100;
     }, 1000 / 60);
 
+
+
     setInterval(() => {
       if (this.isDead() && !isDeadAnimationPlayed) {
         this.playAnimation(this.IMAGES_DEAD);
@@ -124,12 +126,17 @@ class Character extends MoveableObject {
       }
     }, 50);
 
+
+
+
     setInterval(() => {
       if (this.isIdle()) {
         this.playAnimation(this.IMAGES_IDLE);
       }
     }, 4000); // Wenn er 2 Sekunden nicht bewegt wird schläft er ein
 
+
+    
     setInterval(() => {
       if (isDeadAnimationPlayed && isFlyingAnimationPlayed) {
         this.x += flyingSpeedX; // Bewege den Charakter nach rechts

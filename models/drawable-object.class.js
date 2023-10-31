@@ -34,7 +34,7 @@ class DrawableObject {
   }
 
   drawFrame(ctx) {
-    if (this instanceof Character || this instanceof Chicken) {
+    if (this instanceof Character || this instanceof Chicken || this instanceof Endboss) {
       // Frame nur bei Charakter und Chicken anwenden
       ctx.beginPath();
       ctx.lineWidth = "3";

@@ -19,7 +19,7 @@ class World {
   collectedBottlesCounter = 0;
 
   bossBar = new BossBar();
-  endBoss = level1.enemies[0];
+
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -41,6 +41,7 @@ class World {
       this.checkCollisionsWithCoins();
       this.checkCollisionsWithBottles();
       this.checkCollisionsBottleAndChicken();
+      this.checkHitBossWithBottle();
     }, 100);
   }
 
@@ -73,17 +74,16 @@ class World {
   }
 
 
- /* hitBossWithBottle() {
-    this.throwableObject.forEach((bottle) => {
-        if (this.endBossboss.isColliding(bottle)) {
-            bottle.bottleHitsBoss = true;
-            this.endBossboss.hitBoss();
-            this.bossBar.setBossPercentage(this.endBossboss.bossEnergy);
-            this.boss.lifeEnergy -= 15;
-            this.deleteThrownBottle();
-        }
+  checkHitBossWithBottle() {
+    this.throwableObjects.forEach((bottle) => {
+      if (this.bottleCollidingWithChicken(bottle, this.level1.endBoss)) {
+        console.log("Bottle Colliding with endboss");
+        this.endBoss.hitBoss();
+        this.bossBar.setBossPercentage(this.endBoss.bossEnergy);
+
+      }
     });
-}*/
+  }
   
 
   checkCollisionsBottleAndChicken() {

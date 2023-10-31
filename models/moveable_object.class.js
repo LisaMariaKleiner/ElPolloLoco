@@ -44,39 +44,22 @@ class MoveableObject extends DrawableObject {
     );
   }
 
-
-  /*hitBoss() {
+  hitBoss() {
     this.bossEnergy -= 20;
     if (this.bossEnergy < 0) {
       this.bossEnergy = 0;
     } else {
-      this.lastHit = new Date().getTime(); // Zeit vergangen in ms seit 01.01.1970
+      this.lastHit = new Date().getTime();
     }
-  }*/
-  
-  
+  }
 
-  // Character getroffen? Dann zieh Energy ab
+  
   hit() {
     this.energy -= 5;
     if (this.energy < 0) {
       this.energy = 0;
     } else {
       this.lastHit = new Date().getTime(); // Zeit vergangen in ms seit 01.01.1970
-    }
-  }
-
-  hitCoins(coin) {
-    if (!this.coins.includes(coin)) {
-      this.coins.push(coin);
-      console.log(coin);
-    }
-  }
-
-  hitBottle(bottle) {
-    if (!this.coins.includes(bottle)) {
-      this.coins.push(bottle);
-      //console.log(bottle);
     }
   }
 

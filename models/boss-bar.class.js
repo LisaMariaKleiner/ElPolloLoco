@@ -1,4 +1,6 @@
 class BossBar extends DrawableObject {
+  
+
   IMAGES_BOSSENERGY = [
     "img/7_statusbars/1_statusbar/2_statusbar_health/orange/0.png",
     "img/7_statusbars/1_statusbar/2_statusbar_health/orange/20.png",
@@ -8,11 +10,14 @@ class BossBar extends DrawableObject {
     "img/7_statusbars/1_statusbar/2_statusbar_health/orange/100.png",
   ];
 
+  IMAGE_BOSS = ["img/7_statusbars/3_icons/icon_health_endboss.png"];
+
   bossPercentage = 100;
 
   constructor() {
     super();
     this.loadImages(this.IMAGES_BOSSENERGY); //greift auf die Bilder im Array zu (IMAGES_WALKING)
+    this.loadImages(this.IMAGE_BOSS);
 
     this.x = 2000;
     this.y = -5;
@@ -21,28 +26,25 @@ class BossBar extends DrawableObject {
     this.setBossPercentage(100);
   }
 
-
   setBossPercentage(percentage) {
     this.percentage = percentage;
     let path = this.IMAGES_BOSSENERGY[this.resolveImageIndex()];
     this.img = this.imageCache[path];
   }
 
-
   resolveImageIndex() {
-    if (this.percentage == 100) {
+    if (this.bossPercentage == 100) {
       return 5;
-    } else if (this.percentage > 80) {
+    } else if (this.bossPercentage > 80) {
       return 4;
-    } else if (this.percentage > 60) {
+    } else if (this.bossPercentage > 60) {
       return 3;
-    } else if (this.percentage > 40) {
+    } else if (this.bossPercentage > 40) {
       return 2;
-    } else if (this.percentage > 20) {
-        return 1;
+    } else if (this.bossPercentage > 20) {
+      return 1;
     } else {
       return 0;
     }
   }
 }
-
