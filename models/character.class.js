@@ -81,8 +81,8 @@ class Character extends MoveableObject {
     this.animate();
   }
 
-
   animate() {
+    
     setInterval(() => {
       this.walking_sound.pause();
 
@@ -103,8 +103,6 @@ class Character extends MoveableObject {
       this.world.camera_x = -this.x + 100;
     }, 1000 / 60);
 
-
-
     setInterval(() => {
       if (this.isDead()) {
         this.deadSound.play();
@@ -115,25 +113,22 @@ class Character extends MoveableObject {
         this.playAnimation(this.IMAGES_WALKING);
       }
     }, 50);
-
+    
     setInterval(() => {
       if (this.isIdle()) {
         this.playAnimation(this.IMAGES_IDLE);
       }
-    }, 4000); 
-    
+    }, 4000);
   }
-
+  
 
   jump() {
     this.speedY = 30;
   }
 
-
   moveRight() {
     this.x += this.speed;
   }
-
 
   isIdle() {
     return (
@@ -144,14 +139,10 @@ class Character extends MoveableObject {
     );
   }
 
-
-
   isDead() {
     return this.energy == 0;
   }
 
-
-  
   isHurt() {
     let timepassed = new Date().getTime() - this.lastHit; // Differenz im ms
     timepassed = timepassed / 1000; // Differenz in sek

@@ -47,6 +47,7 @@ class World {
   }
 
 
+
   checkThrowObjects() {
     if (this.keyboard.D && this.collectedBottlesCounter > 0) {
       let bottle = new ThrowableObject(
@@ -139,19 +140,6 @@ class World {
     this.bottleBar.setBottleCounter(this.collectedBottlesCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
   }
 
-
-  isCollidingTopOfChicken(character, chicken) {
-    let notCollidingOnX =
-      character.x + character.width < chicken.x ||
-      character.x > chicken.x + chicken.width;
-    let notCollidingOnY = character.y + character.height < chicken.y;
-    let topCollidingOnY =
-      character.y + character.height >= chicken.y &&
-      character.y <= chicken.y + chicken.height;
-    return !(notCollidingOnX || notCollidingOnY) && topCollidingOnY;
-  }
-
-
   bottleCollidingWithChicken(bottle, enemies) {
     return (
       bottle.x + bottle.width >= enemies.x &&
@@ -161,14 +149,13 @@ class World {
     );
   }
 
-
   drawBossImage() {
     let bossImage = new DrawableObject();
-    bossImage.loadImages(["img/7_statusbars/3_icons/icon_health_endboss.png"]);
-    bossImage.x = 200;
-    bossImage.y = 30;
-    bossImage.width = 80; 
-    bossImage.height = 80; 
+    bossImage.loadImage(["img/7_statusbars/3_icons/icon_health_endboss.png"]);
+    bossImage.x = 1890;
+    bossImage.y = -5;
+    bossImage.width = 60; 
+    bossImage.height = 60; 
     this.addToMap(bossImage);
   }
 
@@ -187,9 +174,9 @@ class World {
     this.addObjectsToMap(this.level.backgrounds);
     this.ctx.translate(-this.camera_x, 0);
     // -------- Space for fixed objects --------
-    this.drawBossImage();
-    this.drawStatusBar();
-
+    
+  
+    
     this.ctx.translate(this.camera_x, 0);
 
     this.addToMap(this.character);
@@ -199,6 +186,9 @@ class World {
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.endBoss);
     this.addObjectsToMap(this.throwableObjects);
+    this.drawStatusBar();
+    this.drawBossImage();
+   
     
     this.ctx.translate(-this.camera_x, 0);
     // Mit " this.draw" würde es eine unendlichschleife geben und wsl der PC abstürzen

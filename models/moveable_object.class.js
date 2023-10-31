@@ -56,6 +56,7 @@ class MoveableObject extends DrawableObject {
     return !(notCollidingOnX || notCollidingOnY) && topCollidingOnY;
   }
 
+
   hitBoss() {
     if (this.bossEnergy > 0) {
       this.bossEnergy -= 25;

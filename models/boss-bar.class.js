@@ -10,16 +10,16 @@ class BossBar extends DrawableObject {
     "img/7_statusbars/1_statusbar/2_statusbar_health/orange/100.png",
   ];
 
-  //IMAGE_BOSS = ["img/7_statusbars/3_icons/icon_health_endboss.png"];
+  IMAGE_BOSS = ["img/7_statusbars/3_icons/icon_health_endboss.png"];
 
   bossPercentage = 100;
 
   constructor() {
     super();
     this.loadImages(this.IMAGES_BOSSENERGY); //greift auf die Bilder im Array zu (IMAGES_WALKING)
-    //this.loadImages(this.IMAGE_BOSS);
+    this.loadImages(this.IMAGE_BOSS);
 
-    this.x = 300;//2000;
+    this.x = 1900;
     this.y = -5;
     this.width = 200;
     this.height = 50;
@@ -41,7 +41,7 @@ class BossBar extends DrawableObject {
       return 3;
     } else if (this.bossPercentage > 40) {
       return 2;
-    } else if (this.bossPercentage > 20) { 
+    } else if (this.bossPercentage > 20) {
       return 1;
     } else {
       return 0;

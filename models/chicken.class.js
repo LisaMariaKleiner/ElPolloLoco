@@ -46,10 +46,7 @@ class Chicken extends MoveableObject {
 
   chickenIsDead() {
     clearInterval(this.walkingChickenInterval);
-    setInterval(() => {
-      this.playAnimation(this.IMAGES_CHICKEN_DEAD);
-      this.chickenSound.play();
-    }, interval);
-  }
-    
+    this.playAnimation(this.IMAGES_CHICKEN_DEAD);
+    this.chickenSound.play
+   }
 }
