@@ -2,7 +2,7 @@ class Chicken extends MoveableObject {
   y = 370;
   width = 60;
   height = 60;
-  //chicken_sound = new Audio("sounds/chickensound.mp3");
+  chickenSound = new Audio("sounds/chickensound.mp3");
 
   chickenMovedLeft = setInterval(() => {
                     this.moveLeft();
@@ -46,6 +46,10 @@ class Chicken extends MoveableObject {
 
   chickenIsDead() {
     clearInterval(this.walkingChickenInterval);
-    this.playAnimation(this.IMAGES_CHICKEN_DEAD);
-   }
+    setInterval(() => {
+      this.playAnimation(this.IMAGES_CHICKEN_DEAD);
+      this.chickenSound.play();
+    }, interval);
+  }
+    
 }

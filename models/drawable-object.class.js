@@ -33,7 +33,7 @@ class DrawableObject {
     });
   }
 
-  drawFrame(ctx) {
+  /*drawFrame(ctx) {
     if (this instanceof Character || this instanceof Chicken || this instanceof Endboss) {
       // Frame nur bei Charakter und Chicken anwenden
       ctx.beginPath();
@@ -42,7 +42,7 @@ class DrawableObject {
       ctx.rect(this.x, this.y, this.width, this.height);
       ctx.stroke();
     }
-  }
+  }*/
 
   
 }

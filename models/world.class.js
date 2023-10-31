@@ -29,9 +29,11 @@ class World {
     this.run();
   }
 
+
   setWorld() {
     this.character.world = this;
   }
+
 
   run() {
     setInterval(() => {
@@ -43,6 +45,7 @@ class World {
       this.checkHitBossWithBottle();
     }, 100);
   }
+
 
   checkThrowObjects() {
     if (this.keyboard.D && this.collectedBottlesCounter > 0) {
@@ -56,6 +59,7 @@ class World {
     }
     this.bottleBar.setBottleCounter(this.collectedBottlesCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
   }
+
 
   checkCollisions() {
     this.level.enemies.forEach((enemy, index) => {
@@ -71,6 +75,7 @@ class World {
     });
   }
 
+
   checkHitBossWithBottle() {
     this.throwableObjects.forEach((bottle) => {
       if (this.bottleCollidingWithChicken(bottle, this.level.endBoss[0])) {
@@ -84,6 +89,7 @@ class World {
       }
     });
   }
+
 
   checkCollisionsBottleAndChicken() {
     this.throwableObjects.forEach((bottle) => {
@@ -99,13 +105,11 @@ class World {
   checkCollisionsWithCoins() {
     let character = this.character;
     let coinsToRemove = [];
-
     this.level.coins.forEach((coin) => {
       if (character.isColliding(coin)) {
         coinsToRemove.push(coin);
       }
     });
-
     coinsToRemove.forEach((coin) => {
       let index = this.level.coins.indexOf(coin);
       if (index !== -1) {
@@ -113,20 +117,18 @@ class World {
         this.collectedCoinsCounter++; // Inkrementieren Sie den Zähler für gesammelte Münzen.
       }
     });
-
     this.coinBar.setCoinCounter(this.collectedCoinsCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
   }
+
 
   checkCollisionsWithBottles() {
     let character = this.character;
     let bottlesToRemove = [];
-
     this.level.bottles.forEach((bottle) => {
       if (character.isColliding(bottle)) {
         bottlesToRemove.push(bottle);
       }
     });
-
     bottlesToRemove.forEach((bottle) => {
       let index = this.level.bottles.indexOf(bottle);
       if (index !== -1) {
@@ -134,24 +136,21 @@ class World {
         this.collectedBottlesCounter++; // Inkrementieren Sie den Zähler für gesammelte Münzen.
       }
     });
-
     this.bottleBar.setBottleCounter(this.collectedBottlesCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
   }
 
+
   isCollidingTopOfChicken(character, chicken) {
-    // Überprüfen, ob die rechte Seite des Character nicht links von der linken Seite des Chicken ist
     let notCollidingOnX =
       character.x + character.width < chicken.x ||
       character.x > chicken.x + chicken.width;
-    // Überprüfen, ob die untere Seite des Character nicht über der oberen Seite des Chicken ist
     let notCollidingOnY = character.y + character.height < chicken.y;
-    // Überprüfen, ob die obere Seite des Character unter der oberen Seite des Chicken ist und die untere Seite des Character über der unteren Seite des Chicken ist.
     let topCollidingOnY =
       character.y + character.height >= chicken.y &&
       character.y <= chicken.y + chicken.height;
-    // Nur wenn auf der X-Achse keine Kollision stattfindet und auf der Y-Achse der untere Teil des Character den oberen Teil des Chicken berührt, erfolgt eine Kollision
     return !(notCollidingOnX || notCollidingOnY) && topCollidingOnY;
   }
+
 
   bottleCollidingWithChicken(bottle, enemies) {
     return (
@@ -162,17 +161,34 @@ class World {
     );
   }
 
-  draw() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas clearen!, sonst erscheint der Charakter mehrmals im Bildschirm
 
-    this.ctx.translate(this.camera_x, 0);
-    this.addObjectsToMap(this.level.backgrounds);
+  drawBossImage() {
+    let bossImage = new DrawableObject();
+    bossImage.loadImages(["img/7_statusbars/3_icons/icon_health_endboss.png"]);
+    bossImage.x = 200;
+    bossImage.y = 30;
+    bossImage.width = 80; 
+    bossImage.height = 80; 
+    this.addToMap(bossImage);
+  }
 
-    this.ctx.translate(-this.camera_x, 0);
-    // -------- Space for fixed objects --------
+
+  drawStatusBar() {
     this.addToMap(this.bottleBar);
     this.addToMap(this.statusBar);
     this.addToMap(this.coinBar);
+    this.addToMap(this.bossBar);
+  }
+  
+
+  draw() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas clearen!, sonst erscheint der Charakter mehrmals im Bildschirm
+    this.ctx.translate(this.camera_x, 0);
+    this.addObjectsToMap(this.level.backgrounds);
+    this.ctx.translate(-this.camera_x, 0);
+    // -------- Space for fixed objects --------
+    this.drawBossImage();
+    this.drawStatusBar();
 
     this.ctx.translate(this.camera_x, 0);
 
@@ -182,12 +198,9 @@ class World {
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.endBoss);
-
     this.addObjectsToMap(this.throwableObjects);
-    this.addToMap(this.bossBar);
-
+    
     this.ctx.translate(-this.camera_x, 0);
-
     // Mit " this.draw" würde es eine unendlichschleife geben und wsl der PC abstürzen
     let self = this; // Neue Variable für this erstellen, weil er darauf jetzt nicht mehr zugreifen kann
     requestAnimationFrame(function () {
@@ -196,11 +209,13 @@ class World {
     });
   }
 
+
   addObjectsToMap(objects) {
     objects.forEach((o) => {
       this.addToMap(o); // Die jeweiligen Objekte die oben definiert sind der Map hinzufügen
     });
   }
+
 
   // Fügt MovableObjects ins Canvas ein
   addToMap(mo) {
@@ -210,7 +225,7 @@ class World {
     }
 
     mo.draw(this.ctx);
-    mo.drawFrame(this.ctx);
+   //mo.drawFrame(this.ctx);
 
     if (mo.otherDirection) {
       this.flipImageBack(mo);

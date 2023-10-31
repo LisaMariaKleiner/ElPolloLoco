@@ -1,13 +1,13 @@
 class Character extends MoveableObject {
   height = 250;
   width = 120;
-  y = 180; // 180 vorher
+  y = 150; // 180 vorher
   speed = 4;
   world;
   walking_sound = new Audio("sounds/run.mp3");
+  jumpSound = new Audio("sounds/jump.mp3");
+  deadSound = new Audio("sounds/dead.mp3");
   coins;
- 
-  
 
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
@@ -72,7 +72,7 @@ class Character extends MoveableObject {
   // Constructor wird zuerst ausgeführt!
   constructor() {
     super().loadImage("img/2_character_pepe/2_walk/W-21.png");
-    this.loadImages(this.IMAGES_WALKING); //greift auf die Bilder im Array zu (IMAGES_WALKING)
+    this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
@@ -98,6 +98,7 @@ class Character extends MoveableObject {
       }
       if (this.world.keyboard.SPACE && !this.isInAir()) { 
         this.jump();
+        this.jumpSound.play();
       }
       this.world.camera_x = -this.x + 100;
     }, 1000 / 60);
@@ -106,6 +107,7 @@ class Character extends MoveableObject {
 
     setInterval(() => {
       if (this.isDead()) {
+        this.deadSound.play();
         this.playAnimation(this.IMAGES_DEAD);
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
@@ -118,10 +120,9 @@ class Character extends MoveableObject {
       if (this.isIdle()) {
         this.playAnimation(this.IMAGES_IDLE);
       }
-    }, 4000); // Wenn er 2 Sekunden nicht bewegt wird schläft er ein
+    }, 4000); 
     
   }
-
 
 
   jump() {
@@ -132,7 +133,6 @@ class Character extends MoveableObject {
   moveRight() {
     this.x += this.speed;
   }
-
 
 
   isIdle() {

@@ -45,9 +45,20 @@ class MoveableObject extends DrawableObject {
     );
   }
 
+  isCollidingTopOfChicken(character, chicken) {
+    let notCollidingOnX =
+      character.x + character.width < chicken.x ||
+      character.x > chicken.x + chicken.width;
+    let notCollidingOnY = character.y + character.height < chicken.y;
+    let topCollidingOnY =
+      character.y + character.height >= chicken.y &&
+      character.y <= chicken.y + chicken.height;
+    return !(notCollidingOnX || notCollidingOnY) && topCollidingOnY;
+  }
+
   hitBoss() {
     if (this.bossEnergy > 0) {
-      this.bossEnergy -= 20;
+      this.bossEnergy -= 25;
       this.lastBossHit = new Date().getTime();
     } else if (this.bossEnergy < 0) {
       this.bossEnergy = 0;

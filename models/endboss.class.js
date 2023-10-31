@@ -56,7 +56,7 @@ class Endboss extends MoveableObject {
     this.loadImages(this.IMAGES_BOSS_ALERT);
     this.loadImages(this.IMAGES_BOSS_DEAD);
     this.loadImages(this.IMAGES_BOSS_HURT);
-    //this.loadImages(this.IMAGES_ATACKING);
+    this.loadImages(this.IMAGES_ATACKING);
     //this.loadImages(this.IMAGES_BOSS_WALKING);
     this.bossEnergy = 100;
     this.speed = 7;
@@ -73,6 +73,7 @@ class Endboss extends MoveableObject {
       if (this.endbossIsHurt()) {
         this.playAnimation(this.IMAGES_BOSS_HURT);
         this.endBossMusic.play();
+        this.moveLeft();
       } else if (this.bossIsDead()) {
         this.playAnimation(this.IMAGES_BOSS_DEAD);
         this.endBossMusic.pause();
