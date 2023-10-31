@@ -8,6 +8,7 @@ class Endboss extends MoveableObject {
     bottom: 0,
     left: 0,
   };
+  endBossMusic = new Audio("sounds/endboss.mp3");
 
   IMAGES_BOSS_WALKING = [
     "img/4_enemie_boss_chicken/1_walk/G1.png",
@@ -71,8 +72,10 @@ class Endboss extends MoveableObject {
     setInterval(() => {
       if (this.endbossIsHurt()) {
         this.playAnimation(this.IMAGES_BOSS_HURT);
+        this.endBossMusic.play();
       } else if (this.bossIsDead()) {
         this.playAnimation(this.IMAGES_BOSS_DEAD);
+        this.endBossMusic.pause();
       }
     }, 150);
   }

@@ -6,6 +6,8 @@ class Character extends MoveableObject {
   world;
   walking_sound = new Audio("sounds/run.mp3");
   coins;
+ 
+  
 
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
@@ -81,12 +83,6 @@ class Character extends MoveableObject {
 
 
   animate() {
-    let isDeadAnimationPlayed = false;
-    let isFlyingAnimationPlayed = false;
-    let flyingSpeedX = 3; // Horizontale Geschwindigkeit
-    let flyingSpeedY = 5; // Vertikale Geschwindigkeit
-    
-
     setInterval(() => {
       this.walking_sound.pause();
 
@@ -109,40 +105,20 @@ class Character extends MoveableObject {
 
 
     setInterval(() => {
-      if (this.isDead() && !isDeadAnimationPlayed) {
+      if (this.isDead()) {
         this.playAnimation(this.IMAGES_DEAD);
-        isDeadAnimationPlayed = true;
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
-      } else if (
-        this.isInAir() &&
-        isDeadAnimationPlayed &&
-        !isFlyingAnimationPlayed
-      ) {
-        this.playAnimation(this.IMAGES_DEAD);
-        isFlyingAnimationPlayed = true;
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         this.playAnimation(this.IMAGES_WALKING);
       }
     }, 50);
-
-
-
 
     setInterval(() => {
       if (this.isIdle()) {
         this.playAnimation(this.IMAGES_IDLE);
       }
     }, 4000); // Wenn er 2 Sekunden nicht bewegt wird schläft er ein
-
-
-    
-    setInterval(() => {
-      if (isDeadAnimationPlayed && isFlyingAnimationPlayed) {
-        this.x += flyingSpeedX; // Bewege den Charakter nach rechts
-        this.y += flyingSpeedY; // Bewege den Charakter nach unten
-      }
-    }, 1000 / 60);
     
   }
 
