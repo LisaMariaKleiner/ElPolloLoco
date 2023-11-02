@@ -41,7 +41,7 @@ class World {
       this.checkThrowObjects();
       this.checkCollisionsWithCoins();
       this.checkCollisionsWithBottles();
-      this.checkCollisionsBottleAndChicken();
+      this.checkCollisionsBottleAndChicken(); 
       this.checkHitBossWithBottle();
     }, 100);
   }
@@ -164,7 +164,7 @@ class World {
     this.addToMap(this.bottleBar);
     this.addToMap(this.statusBar);
     this.addToMap(this.coinBar);
-    this.addToMap(this.bossBar);
+    
   }
   
 
@@ -172,11 +172,12 @@ class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas clearen!, sonst erscheint der Charakter mehrmals im Bildschirm
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgrounds);
+
+
     this.ctx.translate(-this.camera_x, 0);
     // -------- Space for fixed objects --------
-    
+    this.drawStatusBar();
   
-    
     this.ctx.translate(this.camera_x, 0);
 
     this.addToMap(this.character);
@@ -186,7 +187,7 @@ class World {
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.endBoss);
     this.addObjectsToMap(this.throwableObjects);
-    this.drawStatusBar();
+    this.addToMap(this.bossBar);
     this.drawBossImage();
    
     

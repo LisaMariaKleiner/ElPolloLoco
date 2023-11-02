@@ -1,18 +1,20 @@
+@font-face {
+    font-family: 'zabars';
+    src:  url('fonts/Zabars.ttf') format('truetype');
+}
 
 body {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
     background-image: url('img/canvasBackground.jpg');
     background-repeat: no-repeat;
     background-size: cover;
-
-}
-
-.center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'zabars', Arial, Helvetica, sans-serif;
 }
 
 h1 {
@@ -28,6 +30,23 @@ p {
 canvas {
     background-color: black;
     display: block;
+}
+
+#game {
+    z-index: 10;
+}
+
+#canvas_screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#fullscreen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .footer {
@@ -46,14 +65,49 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
 }
+
 
 #startscreen img {
     width: 1100px;
 }
 
 .d-none {
-    display: none;
+    display: none !important;
 }
 
+.game_description {
+    font-family: 'Courier New', Courier, monospace;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    left: -250px;
+    top: 30px;
+    gap: 20px;
+}
+
+.game_description p {
+    padding: 5px;
+    font-family:  'zabars', Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+.description_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #000;
+    height: 40px;
+    padding: 5px;
+}
+
+.keyboard_img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

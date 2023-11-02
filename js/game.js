@@ -2,23 +2,29 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 
+function startGame() {
+  changeDisplays();
+  initLevel();
+  init();
+}
+
+function changeDisplays() {
+  let startscreen = document.getElementById("startscreen");
+  let game = document.getElementById("game");
+  game.classList.remove("d-none");
+  startscreen.classList.add("d-none");
+  
+}
+
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
-
-  //console.log("My Character is!", world.character);
 }
 
 
-  function startGame() {
-      let startscreen = document.getElementById("startscreen");
-      let game = document.getElementById("game");
-      startscreen.classList.add("d-none");
-      game.classList.remove("d-none");
-      init();
-    }
-
-
+function mutePage() {
+  document.querySelectorAll("audio").forEach((elem) => muteMe(elem));
+}
 
 // Hiermit wissen wir welche Taste gedrückt wurde und stellt diese beim drücken auf "true"
 window.addEventListener("keydown", (e) => {
@@ -76,4 +82,3 @@ window.addEventListener("keyup", (e) => {
 
   //console.log(e);
 });
-
