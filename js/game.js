@@ -5,6 +5,8 @@ let keyboard = new Keyboard();
 
 function startGame() {
   document.getElementById('win').classList.add('d-none');
+  document.getElementById('gameOver').classList.add('d-none');
+  document.getElementById('mobile_buttons').classList.remove('d-none');
   changeDisplays();
   initLevel();
   init();
@@ -25,6 +27,37 @@ function init() {
 
 function muteToggle() {
   sounds.forEach((element => element.muted = !element.muted))
+  document.getElementById('muteButton').blur();  // Fokus entfernen
+}
+
+function fullscreen() {
+  let fullscreen = document.getElementById('fullscreen');
+  openFullscreen(fullscreen);
+}
+
+/* Get the documentElement (<html>) to display the page in fullscreen */
+let elem = document.getElementById("fullscreen");
+
+/* View in fullscreen */
+function openFullscreen(element) {
+  if (element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if (element.webkitRequestFullscreen) { /* Safari */
+    element.webkitRequestFullscreen();
+  } else if (element.msRequestFullscreen) { /* IE11 */
+    element.msRequestFullscreen();
+  }
+}
+
+/* Close fullscreen */
+function closeFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) { /* Safari */
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) { /* IE11 */
+    document.msExitFullscreen();
+  }
 }
 
 
@@ -84,5 +117,5 @@ window.addEventListener("keyup", (e) => {
     keyboard.D = false;
   }
 
-  //console.log(e);
 });
+

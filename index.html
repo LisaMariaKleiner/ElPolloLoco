@@ -66,8 +66,8 @@
             </div>
 
             <img class="startscreen_img" src="img/9_intro_outro_screens/start/startscreen_1.png">
-            <button onclick="startGame()">Spiel starten</button>
-            
+            <button class="start_game" onclick="startGame()">Spiel starten</button>
+
 
         </div>
 
@@ -76,23 +76,22 @@
         <div id="game" class="d-none">
             <div id="canvas_screen">
                 <h1 id="title">El Pollo Loco</h1>
-                <canvas id="canvas" width="760px" height="480px"></canvas>
-                <div class="footer">
-                    <button>Fullscreen</button>
-                    <button id="muteButton" onclick="muteToggle()">Stummschalten / Stummschaltung aufheben</button>
+                <div id="fullscreen">
+                    <canvas id="canvas" width="760px" height="480px"></canvas>
+
+                    <div class="footer">
+                        <button onclick="fullscreen()">Fullscreen</button>
+                        <button id="muteButton" onclick="muteToggle()">Stummschalten / Stummschaltungaufheben</button>
+                    </div>
                 </div>
 
-                <div class="mobile_button" id="muteButton" >
-                    <img src="./img/tasten/mutesound.png" style="width: 50px; height: 50px" alt="mute sound">
-                </div>
-                  
             </div>
         </div>
 
         <div class="d-none" id="gameOver">
             <div id="endScreen">
                 <img src="img/9_intro_outro_screens/game_over/game over!.png">
-                <button class="new_game_button" onclick="startNewGame()">New Game</button>
+                <button class="new_game_button" onclick="startGame()">New Game</button>
             </div>
         </div>
 
@@ -100,6 +99,17 @@
             <div id="endScreen_win">
                 <h2>YOU WIN</h2>
                 <button class="new_game_button" onclick="startGame()">New Game</button>
+            </div>
+        </div>
+
+        <div id="mobile_buttons" class="mobile d-none">
+            <div class="moveButtons">
+                <button id="run_left"><img src="./img/tasten/iconlinks.png" alt=""></button>
+                <button id="run_right"><img src="./img/tasten/iconrechts.png" alt=""></button>
+            </div>
+            <div class="jump_and_throw">
+                <button id="jump"><img src="./img/tasten/iconleertaste.png" alt=""></button>
+                <button id="throw"><img src="./img/tasten//icond.png" alt=""></button>
             </div>
         </div>
 
