@@ -5,8 +5,6 @@ class Character extends MoveableObject {
   speed = 4;
   world;
   coins;
-  
-  
 
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
@@ -69,7 +67,6 @@ class Character extends MoveableObject {
   ];
 
 
-  // Constructor wird zuerst ausgeführt!
   constructor() {
     super().loadImage("img/2_character_pepe/2_walk/W-21.png");
     this.loadImages(this.IMAGES_WALKING);
@@ -81,51 +78,81 @@ class Character extends MoveableObject {
     this.animate();
   }
 
+
   animate() {
-    const character = this;
-
-    const movementIntervalId = setInterval(() => {
-      walking_sound.pause();
-
-      if (character.world.keyboard.RIGHT && character.x < character.world.level.level_end_x) {
-        character.moveRight();
-        character.otherDirection = false;
-        walking_sound.play();
-      }
-      if (character.world.keyboard.LEFT && character.x > 0) {
-        character.moveLeft();
-        character.otherDirection = true;
-        walking_sound.play();
-      }
-      if (character.world.keyboard.SPACE && !character.isInAir()) {
-        character.jump();
-        jumpSound.play();
-      }
+    let character = this;
+    let movementIntervalId = setInterval(() => {
+      character.handleMovement();
       character.world.camera_x = -character.x + 100;
     }, 1000 / 60);
-
-    const actionIntervalId = setInterval(() => {
-      if (character.isDead()) {
-        deadSound.play();
-        character.playAnimation(character.IMAGES_DEAD);
-        character.showGameOverScreen();
-      } else if (character.isHurt()) {
-        painSound.play();
-        character.playAnimation(character.IMAGES_HURT);
-      } else if (character.world.keyboard.RIGHT || character.world.keyboard.LEFT) {
-        walking_sound.play();
-        character.playAnimation(character.IMAGES_WALKING);
-      }
+    let actionIntervalId = setInterval(() => {
+      character.handleActions();
     }, 50);
-
-    const idleIntervalId = setInterval(() => {
-      if (character.isIdle()) {
-        character.playAnimation(character.IMAGES_IDLE);
-      }
+    let idleIntervalId = setInterval(() => {
+      character.handleIdle();
     }, 4000);
-
-    character.intervalIds = [movementIntervalId, actionIntervalId, idleIntervalId];
+    character.intervalIds = [
+      movementIntervalId,
+      actionIntervalId,
+      idleIntervalId,
+    ];
   }
+
+
+  handleMovement() {
+    walking_sound.pause();
+    if (this.canMoveRight()) {
+      this.moveRight();
+      this.otherDirection = false;
+    }
+    if (this.canMoveLeft()) {
+      this.moveLeft();
+      this.otherDirection = true;
+      walking_sound.play();
+    }
+    if (this.canJump()) {
+      this.jump();
+      jumpSound.play();
+    }
+  }
+
+
+  canMoveRight() {
+   return this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x
+  }
+
+
+  canMoveLeft() {
+    return this.world.keyboard.LEFT && this.x > 0
+  }
+  
+
+  canJump() {
+    return this.world.keyboard.SPACE && !this.isInAir()
+  }
+
+
+  handleActions() {
+    if (this.isDead()) {
+      deadSound.play();
+      this.playAnimation(this.IMAGES_DEAD);
+      this.showGameOverScreen();
+    } else if (this.isHurt()) {
+      painSound.play();
+      this.playAnimation(this.IMAGES_HURT);
+    } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+      walking_sound.play();
+      this.playAnimation(this.IMAGES_WALKING);
+    }
+  }
+
+
+  handleIdle() {
+    if (this.isIdle()) {
+      this.playAnimation(this.IMAGES_IDLE);
+    }
+  }
+
 
   stopIntervals() {
     if (this.intervalIds) {
@@ -133,13 +160,17 @@ class Character extends MoveableObject {
     }
   }
 
+
   jump() {
     this.speedY = 30;
   }
 
+
   moveRight() {
     this.x += this.speed;
+    walking_sound.play();
   }
+
 
   isIdle() {
     return (
@@ -150,9 +181,11 @@ class Character extends MoveableObject {
     );
   }
 
+
   isDead() {
     return this.energy == 0;
   }
+
 
   isHurt() {
     let timepassed = new Date().getTime() - this.lastHit; // Differenz im ms
@@ -160,9 +193,10 @@ class Character extends MoveableObject {
     return timepassed < 1;
   }
 
+  
   showGameOverScreen() {
-    this.stopIntervals(); 
-    document.getElementById('gameOver').classList.remove('d-none');
-    document.getElementById('game').classList.add('d-none');
+    this.stopIntervals();
+    document.getElementById("gameOver").classList.remove("d-none");
+    document.getElementById("game").classList.add("d-none");
   }
 }
