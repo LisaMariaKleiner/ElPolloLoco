@@ -3,7 +3,6 @@ let world;
 let keyboard = new Keyboard();
 
 
-
 function startGame() {
   document.getElementById('win').classList.add('d-none');
   changeDisplays();
@@ -22,6 +21,10 @@ function changeDisplays() {
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
+}
+
+function muteToggle() {
+  sounds.forEach((element => element.muted = !element.muted))
 }
 
 

@@ -8,8 +8,7 @@ class Endboss extends MoveableObject {
     bottom: 0,
     left: 0,
   };
-  endBossMusic = new Audio("sounds/endboss.mp3");
-  endbossKilled = new Audio("sounds/win.mp3");
+  
 
   hadFirstContact = false;
 
@@ -91,11 +90,11 @@ class Endboss extends MoveableObject {
     attackInterval = setInterval(() => {
       if (this.endbossIsHurt()) {
         this.playAnimation(this.IMAGES_BOSS_HURT);
-        this.endBossMusic.play();
+        endBossMusic.play();
         this.moveLeft();
       } else if (this.bossIsDead()) {
         this.playAnimation(this.IMAGES_BOSS_DEAD);
-        this.endBossMusic.pause();
+        endBossMusic.pause();
         // Beende die Intervalle, wenn der Boss tot ist
         clearInterval(walkingInterval);
         clearInterval(attackInterval);
@@ -117,7 +116,7 @@ class Endboss extends MoveableObject {
   showWinScreen() {
     document.getElementById('win').classList.remove('d-none');
     document.getElementById('game').classList.add('d-none');
-    this.endbossKilled.play();
+    endbossKilled.play();
   }
   
   

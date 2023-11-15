@@ -9,21 +9,7 @@ class MoveableObject extends DrawableObject {
   coins = [];
   bottles = [];
 
-  isMuted = false;
-
-  toggleMute() {
-    this.isMuted = !this.isMuted;
-    audioElements.forEach((audio) => {
-      audio.muted = this.isMuted;
-    });
-  }
-
-  playAudioWithMute(audioElement) {
-    if (!this.isMuted) {
-      audioElement.play();
-    }
-  }
-
+   
   playAnimation(images) {
     let i = this.currentImage % images.length;
     let path = images[i];

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="models/drawable-object.class.js"></script>
+    <script src="js/data.audio.js"></script>
     <script src="models/moveable_object.class.js"></script>
     <script src="models/character.class.js"></script>
     <script src="models/chicken.class.js"></script>
@@ -66,6 +67,7 @@
 
             <img class="startscreen_img" src="img/9_intro_outro_screens/start/startscreen_1.png">
             <button onclick="startGame()">Spiel starten</button>
+            
 
         </div>
 
@@ -77,10 +79,10 @@
                 <canvas id="canvas" width="760px" height="480px"></canvas>
                 <div class="footer">
                     <button>Fullscreen</button>
-                    <button id="muteButton">Stummschalten / Stummschaltung aufheben</button>
+                    <button id="muteButton" onclick="muteToggle()">Stummschalten / Stummschaltung aufheben</button>
                 </div>
 
-                <div class="mobile_button" id="muteButton" onclick="toggleMute()">
+                <div class="mobile_button" id="muteButton" >
                     <img src="./img/tasten/mutesound.png" style="width: 50px; height: 50px" alt="mute sound">
                 </div>
                   

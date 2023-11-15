@@ -4,10 +4,6 @@ class Character extends MoveableObject {
   y = 150; // 180 vorher
   speed = 4;
   world;
-  walking_sound = new Audio("sounds/run.mp3");
-  jumpSound = new Audio("sounds/jump.mp3");
-  deadSound = new Audio("sounds/dead.mp3");
-  painSound = new Audio("sounds/pain.mp3");
   coins;
   
   
@@ -89,42 +85,41 @@ class Character extends MoveableObject {
     const character = this;
 
     const movementIntervalId = setInterval(() => {
-      character.walking_sound.pause();
+      walking_sound.pause();
 
       if (character.world.keyboard.RIGHT && character.x < character.world.level.level_end_x) {
         character.moveRight();
         character.otherDirection = false;
-        character.playAudioWithMute(character.walking_sound);
+        walking_sound.play();
       }
       if (character.world.keyboard.LEFT && character.x > 0) {
         character.moveLeft();
         character.otherDirection = true;
-        character.playAudioWithMute(character.walking_sound);
+        walking_sound.play();
       }
       if (character.world.keyboard.SPACE && !character.isInAir()) {
         character.jump();
-        character.playAudioWithMute(character.jumpSound);
+        jumpSound.play();
       }
       character.world.camera_x = -character.x + 100;
     }, 1000 / 60);
 
     const actionIntervalId = setInterval(() => {
       if (character.isDead()) {
-        character.playAudioWithMute(character.deadSound);
+        deadSound.play();
         character.playAnimation(character.IMAGES_DEAD);
         character.showGameOverScreen();
       } else if (character.isHurt()) {
-        character.playAudioWithMute(character.painSound);
+        painSound.play();
         character.playAnimation(character.IMAGES_HURT);
       } else if (character.world.keyboard.RIGHT || character.world.keyboard.LEFT) {
-        character.playAudioWithMute(character.walking_sound);
+        walking_sound.play();
         character.playAnimation(character.IMAGES_WALKING);
       }
     }, 50);
 
     const idleIntervalId = setInterval(() => {
       if (character.isIdle()) {
-        character.playAudioWithMute(character.walking_sound);
         character.playAnimation(character.IMAGES_IDLE);
       }
     }, 4000);
