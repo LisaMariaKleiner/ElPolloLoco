@@ -7,7 +7,10 @@ class Character extends MoveableObject {
   walking_sound = new Audio("sounds/run.mp3");
   jumpSound = new Audio("sounds/jump.mp3");
   deadSound = new Audio("sounds/dead.mp3");
+  painSound = new Audio("sounds/pain.mp3");
   coins;
+  
+  
 
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
@@ -69,6 +72,7 @@ class Character extends MoveableObject {
     "img/2_character_pepe/1_idle/long_idle/I-20.png",
   ];
 
+
   // Constructor wird zuerst ausgeführt!
   constructor() {
     super().loadImage("img/2_character_pepe/2_walk/W-21.png");
@@ -82,45 +86,57 @@ class Character extends MoveableObject {
   }
 
   animate() {
-    
-    setInterval(() => {
-      this.walking_sound.pause();
+    const character = this;
 
-      if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-        this.moveRight();
-        this.otherDirection = false; // Bild nicht gespiegelt
-        this.walking_sound.play();
+    const movementIntervalId = setInterval(() => {
+      character.walking_sound.pause();
+
+      if (character.world.keyboard.RIGHT && character.x < character.world.level.level_end_x) {
+        character.moveRight();
+        character.otherDirection = false;
+        character.playAudioWithMute(character.walking_sound);
       }
-      if (this.world.keyboard.LEFT && this.x > 0) {
-        this.moveLeft();
-        this.otherDirection = true; // Bild gespiegelt
-        this.walking_sound.play();
+      if (character.world.keyboard.LEFT && character.x > 0) {
+        character.moveLeft();
+        character.otherDirection = true;
+        character.playAudioWithMute(character.walking_sound);
       }
-      if (this.world.keyboard.SPACE && !this.isInAir()) { 
-        this.jump();
-        this.jumpSound.play();
+      if (character.world.keyboard.SPACE && !character.isInAir()) {
+        character.jump();
+        character.playAudioWithMute(character.jumpSound);
       }
-      this.world.camera_x = -this.x + 100;
+      character.world.camera_x = -character.x + 100;
     }, 1000 / 60);
 
-    setInterval(() => {
-      if (this.isDead()) {
-        this.deadSound.play();
-        this.playAnimation(this.IMAGES_DEAD);
-      } else if (this.isHurt()) {
-        this.playAnimation(this.IMAGES_HURT);
-      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-        this.playAnimation(this.IMAGES_WALKING);
+    const actionIntervalId = setInterval(() => {
+      if (character.isDead()) {
+        character.playAudioWithMute(character.deadSound);
+        character.playAnimation(character.IMAGES_DEAD);
+        character.showGameOverScreen();
+      } else if (character.isHurt()) {
+        character.playAudioWithMute(character.painSound);
+        character.playAnimation(character.IMAGES_HURT);
+      } else if (character.world.keyboard.RIGHT || character.world.keyboard.LEFT) {
+        character.playAudioWithMute(character.walking_sound);
+        character.playAnimation(character.IMAGES_WALKING);
       }
     }, 50);
-    
-    setInterval(() => {
-      if (this.isIdle()) {
-        this.playAnimation(this.IMAGES_IDLE);
+
+    const idleIntervalId = setInterval(() => {
+      if (character.isIdle()) {
+        character.playAudioWithMute(character.walking_sound);
+        character.playAnimation(character.IMAGES_IDLE);
       }
     }, 4000);
+
+    character.intervalIds = [movementIntervalId, actionIntervalId, idleIntervalId];
   }
-  
+
+  stopIntervals() {
+    if (this.intervalIds) {
+      this.intervalIds.forEach((id) => clearInterval(id));
+    }
+  }
 
   jump() {
     this.speedY = 30;
@@ -147,5 +163,11 @@ class Character extends MoveableObject {
     let timepassed = new Date().getTime() - this.lastHit; // Differenz im ms
     timepassed = timepassed / 1000; // Differenz in sek
     return timepassed < 1;
+  }
+
+  showGameOverScreen() {
+    this.stopIntervals(); 
+    document.getElementById('gameOver').classList.remove('d-none');
+    document.getElementById('game').classList.add('d-none');
   }
 }

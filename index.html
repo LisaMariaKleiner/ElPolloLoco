@@ -24,6 +24,7 @@
     <script src="models/throwable_object.class.js"></script>
     <script src="models/boss-bar.class.js"></script>
     <script src="./js/game.js"></script>
+    <script src="./js/gameOver.js"></script>
 
     <title>El Pollo Loco</title>
 
@@ -73,18 +74,34 @@
         <div id="game" class="d-none">
             <div id="canvas_screen">
                 <h1 id="title">El Pollo Loco</h1>
-                <canvas id="canvas" width="720px" height="480px"></canvas>
+                <canvas id="canvas" width="760px" height="480px"></canvas>
                 <div class="footer">
                     <button>Fullscreen</button>
-                    <button onclick="mutePage()" id="muteButton">Stummschalten / Stummschaltung aufheben</button>
+                    <button id="muteButton">Stummschalten / Stummschaltung aufheben</button>
                 </div>
+
+                <div class="mobile_button" id="muteButton" onclick="toggleMute()">
+                    <img src="./img/tasten/mutesound.png" style="width: 50px; height: 50px" alt="mute sound">
+                </div>
+                  
+            </div>
+        </div>
+
+        <div class="d-none" id="gameOver">
+            <div id="endScreen">
+                <img src="img/9_intro_outro_screens/game_over/game over!.png">
+                <button class="new_game_button" onclick="startNewGame()">New Game</button>
+            </div>
+        </div>
+
+        <div class="d-none" id="win">
+            <div id="endScreen_win">
+                <h2>YOU WIN</h2>
+                <button class="new_game_button" onclick="startGame()">New Game</button>
             </div>
         </div>
 
     </div>
-
-
-
 
 </body>
 

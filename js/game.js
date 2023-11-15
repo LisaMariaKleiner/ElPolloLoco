@@ -2,7 +2,10 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 
+
+
 function startGame() {
+  document.getElementById('win').classList.add('d-none');
   changeDisplays();
   initLevel();
   init();
@@ -22,9 +25,7 @@ function init() {
 }
 
 
-function mutePage() {
-  document.querySelectorAll("audio").forEach((elem) => muteMe(elem));
-}
+
 
 // Hiermit wissen wir welche Taste gedrückt wurde und stellt diese beim drücken auf "true"
 window.addEventListener("keydown", (e) => {

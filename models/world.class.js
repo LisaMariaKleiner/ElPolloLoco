@@ -167,6 +167,7 @@ class World {
     
   }
   
+  
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas clearen!, sonst erscheint der Charakter mehrmals im Bildschirm
@@ -236,4 +237,7 @@ class World {
     mo.x = mo.x * -1; // X achse wieder in Ursprungszustand setzen
     this.ctx.restore();
   }
+
+
+  
 }

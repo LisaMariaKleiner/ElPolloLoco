@@ -9,6 +9,9 @@ class Endboss extends MoveableObject {
     left: 0,
   };
   endBossMusic = new Audio("sounds/endboss.mp3");
+  endbossKilled = new Audio("sounds/win.mp3");
+
+  hadFirstContact = false;
 
   IMAGES_BOSS_WALKING = [
     "img/4_enemie_boss_chicken/1_walk/G1.png",
@@ -51,13 +54,14 @@ class Endboss extends MoveableObject {
     "img/4_enemie_boss_chicken/5_dead/G26.png",
   ];
 
+  
   constructor() {
     super();
     this.loadImages(this.IMAGES_BOSS_ALERT);
     this.loadImages(this.IMAGES_BOSS_DEAD);
     this.loadImages(this.IMAGES_BOSS_HURT);
     this.loadImages(this.IMAGES_ATACKING);
-    //this.loadImages(this.IMAGES_BOSS_WALKING);
+    this.loadImages(this.IMAGES_BOSS_WALKING);
     this.bossEnergy = 100;
     this.speed = 7;
     this.x = 2000;
@@ -65,11 +69,26 @@ class Endboss extends MoveableObject {
   }
 
   animate() {
-    setInterval(() => {
-      this.playAnimation(this.IMAGES_BOSS_ALERT);
-    }, 500);
+    let i = 0; 
 
-    setInterval(() => {
+    let walkingInterval;
+    let attackInterval;
+
+    walkingInterval = setInterval(() => {
+      if (i < 10) {
+        this.playAnimation(this.IMAGES_BOSS_WALKING);
+      } else {
+        this.playAnimation(this.IMAGES_BOSS_ALERT);
+        this.playAnimation(this.IMAGES_ATACKING);
+      }
+      i++;
+      if (world.character.x > 2500 && !hadFirstContact) {
+        i = 0;
+        hadFirstContact = true;
+      }
+    }, 150);
+
+    attackInterval = setInterval(() => {
       if (this.endbossIsHurt()) {
         this.playAnimation(this.IMAGES_BOSS_HURT);
         this.endBossMusic.play();
@@ -77,6 +96,10 @@ class Endboss extends MoveableObject {
       } else if (this.bossIsDead()) {
         this.playAnimation(this.IMAGES_BOSS_DEAD);
         this.endBossMusic.pause();
+        // Beende die Intervalle, wenn der Boss tot ist
+        clearInterval(walkingInterval);
+        clearInterval(attackInterval);
+        this.showWinScreen();// Rufe die Funktion für den GameOver-Screen auf
       }
     }, 150);
   }
@@ -90,4 +113,12 @@ class Endboss extends MoveableObject {
     bosstimepassed = bosstimepassed / 1000; // Differenz in sek
     return bosstimepassed < 1;
   }
+
+  showWinScreen() {
+    document.getElementById('win').classList.remove('d-none');
+    document.getElementById('game').classList.add('d-none');
+    this.endbossKilled.play();
+  }
+  
+  
 }
