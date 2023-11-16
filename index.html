@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="img/icons8-kuhschädel-16.png">
     <script src="models/drawable-object.class.js"></script>
     <script src="js/data.audio.js"></script>
     <script src="models/moveable_object.class.js"></script>
@@ -32,84 +33,91 @@
 </head>
 
 <body>
-    <div id="fullscreen">
 
-        <div id="startscreen">
-
-            <div class="game_description">
-                <img src="img/tasten/icons8-tastatur-64.png" style="width: 60px; height: 55px" alt="">
-                <div class="description_container">
-                    <p>Run left </p>
-                    <div class="keyboard_img">
-                        <img src="img/tasten/iconlinks.png" style="width: 25px; height: 25px" alt="">
-                    </div>
-                </div>
-                <div class="description_container">
-                    <p>Run right</p>
-                    <div class="keyboard_img">
-                        <img src="img/tasten/iconrechts.png" style="width: 25px; height: 25px" alt="">
-                    </div>
-                </div>
-                <div class="description_container">
-                    <p>Jump </p>
-                    <div class="keyboard_img">
-                        <img src="img/tasten/iconleertaste.png" style="width: 40px; height: 25px" alt="">
-                    </div>
-                </div>
-                <div class="description_container">
-                    <p>Throw bottles</p>
-                    <div class="keyboard_img">
-                        <img src="img/tasten/icond.png" style="width: 25px; height: 25px" alt="">
-                    </div>
-                </div>
-
-            </div>
-
-            <img class="startscreen_img" src="img/9_intro_outro_screens/start/startscreen_1.png">
+    <div id="startscreen">
+        <img class="startscreen_img" src="img/9_intro_outro_screens/start/startscreen_1.png">
+        <div>
             <button class="start_game" onclick="startGame()">Spiel starten</button>
+            <button class="start_game" onclick="toggleDirections()">Tastenbelegung</button>
         </div>
+    </div>
 
-        <div id="game" class="d-none">
-            <div id="canvas_screen">
-                <h1 id="title">El Pollo Loco</h1>
-                <div id="fullscreen">
-                    <canvas id="canvas" width="760px" height="480px"></canvas>
+    <div id="description" class="game_description d-none">
+        <img src="img/tasten/icons8-tastatur-64.png" style="width: 60px; height: 55px" alt="">
+        <div class="description_container">
+            <p>Run left </p>
+            <div class="keyboard_img">
+                <img src="img/tasten/iconlinks.png" style="width: 25px; height: 25px" alt="">
+            </div>
+        </div>
+        <div class="description_container">
+            <p>Run right</p>
+            <div class="keyboard_img">
+                <img src="img/tasten/iconrechts.png" style="width: 25px; height: 25px" alt="">
+            </div>
+        </div>
+        <div class="description_container">
+            <p>Jump </p>
+            <div class="keyboard_img">
+                <img src="img/tasten/iconleertaste.png" style="width: 40px; height: 25px" alt="">
+            </div>
+        </div>
+        <div class="description_container">
+            <p>Throw bottles</p>
+            <div class="keyboard_img">
+                <img src="img/tasten/icond.png" style="width: 25px; height: 25px" alt="">
+            </div>
+        </div>
+        <div class="button_on_description">
+            <button class="start_game" onclick="startGame()">Spiel starten</button>
+            <button class="start_game" onclick="toggleDirections()">Startscreen</button>
+        </div>
+    </div>
 
-                    <div class="footer">
-                        <button onclick="fullscreen()">Fullscreen</button>
-                        <button id="muteButton" onclick="muteToggle()">Stummschalten / Stummschaltungaufheben</button>
-                    </div>
+    <div id="game" class="d-none">
+        <div id="canvas_screen">
+            <h1 id="title">El Pollo Loco</h1>
+            <div id="fullscreen">
+                <canvas id="canvas" width="760px" height="480px"></canvas>
+
+                <div class="footer">
+                    <button onclick="fullscreen()">Fullscreen</button>
+                    <button id="muteButton" onclick="muteToggle()">
+                        <div class="speaker-container">
+                            <div class="line"></div>
+                            <img id="speakerIcon" src="img/lautsprecher.png" alt="Speaker Icon">
+                        </div>
+                    </button>
                 </div>
-
             </div>
+
         </div>
+    </div>
 
-        <div class="d-none" id="gameOver">
-            <div id="endScreen">
-                <img src="img/9_intro_outro_screens/game_over/game over!.png">
-                <button class="new_game_button" onclick="startGame()">New Game</button>
-            </div>
+    <div class="d-none" id="gameOver">
+        <div id="endScreen">
+            <img src="img/9_intro_outro_screens/game_over/game over!.png">
+            <button class="new_game_button" onclick="startGame()">New Game</button>
         </div>
+    </div>
 
-        <div class="d-none" id="win">
-            <div id="endScreen_win">
-                <h2>YOU WIN</h2>
-                <button class="new_game_button" onclick="startGame()">New Game</button>
-            </div>
+    <div class="d-none" id="win">
+        <div id="endScreen_win" class=" center">
+            <h2>YOU WIN</h2>
+            <button class="new_game_button" onclick="startGame()">New Game</button>
         </div>
+    </div>
 
-        <div id="mobile_buttons" class="mobile d-none">
-            <div class="moveButtons">
-                <button id="run_left"><img src="./img/tasten/iconlinks.png" alt=""></button>
-                <button id="run_right"><img src="./img/tasten/iconrechts.png" alt=""></button>
-            </div>
-            <div class="jump_and_throw">
-                <button id="muteButton" onclick="muteToggle()">Mute</button>
-                <button id="jump"><img src="./img/tasten/iconleertaste.png" alt=""></button>
-                <button id="throw"><img src="./img/tasten//icond.png" alt=""></button>
-            </div>
+    <div id="mobile_buttons" class="mobile d-none">
+        <div class="moveButtons">
+            <button id="run_left"><img src="./img/tasten/iconlinks.png" alt=""></button>
+            <button id="run_right"><img src="./img/tasten/iconrechts.png" alt=""></button>
         </div>
-
+        <div class="jump_and_throw">
+            <button id="muteButton" onclick="muteToggle()">Mute</button>
+            <button id="jump">JUMP</button>
+            <button id="throw">Bottle</button>
+        </div>
     </div>
 
 </body>

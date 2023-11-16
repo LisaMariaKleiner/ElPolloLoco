@@ -1,5 +1,6 @@
 class World {
   character = new Character();
+  bossBar = new BossBar();
   endBoss;
   level = level1;
   canvas;
@@ -9,17 +10,12 @@ class World {
   statusBar = new StatusBar();
   coinBar = new CoinBar(this.collectedCoins);
   bottleBar = new BottleBar(this.collectedBottles);
-
   throwableObjects = [];
-
-  collectedCoins = []; // gesammelte Münzen
-  collectedCoinsCounter = 0; // Zähler für gesammelte Münzen
-
+  collectedCoins = []; 
+  collectedCoinsCounter = 0; 
   collectedBottles = [];
   collectedBottlesCounter = 0;
-
-  bossBar = new BossBar();
-
+ 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
@@ -27,13 +23,12 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
+    
   }
-
 
   setWorld() {
     this.character.world = this;
   }
-
 
   run() {
     setInterval(() => {
@@ -41,12 +36,10 @@ class World {
       this.checkThrowObjects();
       this.checkCollisionsWithCoins();
       this.checkCollisionsWithBottles();
-      this.checkCollisionsBottleAndChicken(); 
+      this.checkCollisionsBottleAndChicken();
       this.checkHitBossWithBottle();
     }, 100);
   }
-
-
 
   checkThrowObjects() {
     if (this.keyboard.D && this.collectedBottlesCounter > 0) {
@@ -58,16 +51,16 @@ class World {
       this.throwableObjects.push(bottle);
       this.collectedBottlesCounter--; // Inkrementieren Sie den Zähler für gesammelte Münzen
     }
-    this.bottleBar.setBottleCounter(this.collectedBottlesCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
+    this.bottleBar.setBottleCounter(this.collectedBottlesCounter); 
   }
-
 
   checkCollisions() {
     this.level.enemies.forEach((enemy, index) => {
       if (this.character.isColliding(enemy)) {
         if (this.character.isInAir()) {
-          this.character.jump();
-          this.level.enemies.splice(index, 1);
+          this.character.littleJump();
+          enemy.animate();
+          this.deleteThisEnemy(index);
         } else {
           this.character.hit();
           this.statusBar.setPercentage(this.character.energy);
@@ -75,8 +68,13 @@ class World {
       }
     });
   }
+  
 
+  deleteThisEnemy(index) {
+    this.level.enemies.splice(index, 1);
+  }
 
+  
   checkHitBossWithBottle() {
     this.throwableObjects.forEach((bottle) => {
       if (this.bottleCollidingWithChicken(bottle, this.level.endBoss[0])) {
@@ -90,7 +88,6 @@ class World {
       }
     });
   }
-
 
   checkCollisionsBottleAndChicken() {
     this.throwableObjects.forEach((bottle) => {
@@ -120,7 +117,6 @@ class World {
     });
     this.coinBar.setCoinCounter(this.collectedCoinsCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
   }
-
 
   checkCollisionsWithBottles() {
     let character = this.character;
@@ -154,31 +150,26 @@ class World {
     bossImage.loadImage(["img/7_statusbars/3_icons/icon_health_endboss.png"]);
     bossImage.x = 1890;
     bossImage.y = -5;
-    bossImage.width = 60; 
-    bossImage.height = 60; 
+    bossImage.width = 60;
+    bossImage.height = 60;
     this.addToMap(bossImage);
   }
-
 
   drawStatusBar() {
     this.addToMap(this.bottleBar);
     this.addToMap(this.statusBar);
     this.addToMap(this.coinBar);
-    
   }
-  
-  
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas clearen!, sonst erscheint der Charakter mehrmals im Bildschirm
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgrounds);
 
-
     this.ctx.translate(-this.camera_x, 0);
     // -------- Space for fixed objects --------
     this.drawStatusBar();
-  
+
     this.ctx.translate(this.camera_x, 0);
 
     this.addToMap(this.character);
@@ -190,8 +181,7 @@ class World {
     this.addObjectsToMap(this.throwableObjects);
     this.addToMap(this.bossBar);
     this.drawBossImage();
-   
-    
+
     this.ctx.translate(-this.camera_x, 0);
     // Mit " this.draw" würde es eine unendlichschleife geben und wsl der PC abstürzen
     let self = this; // Neue Variable für this erstellen, weil er darauf jetzt nicht mehr zugreifen kann
@@ -201,13 +191,11 @@ class World {
     });
   }
 
-
   addObjectsToMap(objects) {
     objects.forEach((o) => {
       this.addToMap(o); // Die jeweiligen Objekte die oben definiert sind der Map hinzufügen
     });
   }
-
 
   // Fügt MovableObjects ins Canvas ein
   addToMap(mo) {
@@ -217,7 +205,7 @@ class World {
     }
 
     mo.draw(this.ctx);
-   //mo.drawFrame(this.ctx);
+    //mo.drawFrame(this.ctx);
 
     if (mo.otherDirection) {
       this.flipImageBack(mo);
@@ -237,7 +225,4 @@ class World {
     mo.x = mo.x * -1; // X achse wieder in Ursprungszustand setzen
     this.ctx.restore();
   }
-
-
-  
 }

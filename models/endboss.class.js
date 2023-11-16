@@ -8,7 +8,6 @@ class Endboss extends MoveableObject {
     bottom: 0,
     left: 0,
   };
-  
 
   hadFirstContact = false;
 
@@ -53,11 +52,9 @@ class Endboss extends MoveableObject {
     "img/4_enemie_boss_chicken/5_dead/G26.png",
   ];
 
-  
   constructor() {
     super();
     this.loadImages(this.IMAGES_BOSS_ALERT);
-    this.loadImages(this.IMAGES_BOSS_DEAD);
     this.loadImages(this.IMAGES_BOSS_HURT);
     this.loadImages(this.IMAGES_ATACKING);
     this.loadImages(this.IMAGES_BOSS_WALKING);
@@ -65,14 +62,13 @@ class Endboss extends MoveableObject {
     this.speed = 7;
     this.x = 2000;
     this.animate();
+    this.loadImages(this.IMAGES_BOSS_DEAD);
   }
 
   animate() {
-    let i = 0; 
-
+    let i = 0;
     let walkingInterval;
     let attackInterval;
-
     walkingInterval = setInterval(() => {
       if (i < 10) {
         this.playAnimation(this.IMAGES_BOSS_WALKING);
@@ -95,12 +91,14 @@ class Endboss extends MoveableObject {
       } else if (this.bossIsDead()) {
         this.playAnimation(this.IMAGES_BOSS_DEAD);
         endBossMusic.pause();
-        // Beende die Intervalle, wenn der Boss tot ist
         clearInterval(walkingInterval);
         clearInterval(attackInterval);
-        this.showWinScreen();// Rufe die Funktion für den GameOver-Screen auf
+        endbossKilled.play();
+        setTimeout(() => {
+          this.showWinScreen();
+        }, 2000);
       }
-    }, 150);
+    }, 500);
   }
 
   bossIsDead() {
@@ -114,10 +112,7 @@ class Endboss extends MoveableObject {
   }
 
   showWinScreen() {
-    document.getElementById('win').classList.remove('d-none');
-    document.getElementById('game').classList.add('d-none');
-    endbossKilled.play();
+    document.getElementById("win").classList.remove("d-none");
+    document.getElementById("game").classList.add("d-none");
   }
-  
-  
 }

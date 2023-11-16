@@ -3,6 +3,11 @@
     src: url('fonts/Zabars.ttf') format('truetype');
 }
 
+html {
+
+    font-family: 'zabars', Arial, Helvetica, sans-serif;
+}
+
 body {
     display: flex;
     justify-content: center;
@@ -11,10 +16,9 @@ body {
     background-image: url('img/canvasBackground.jpg');
     background-repeat: no-repeat;
     background-size: cover;
-    text-align: center;
+    width: 100vw;
     height: 100vh;
     margin: 0;
-    font-family: 'zabars', Arial, Helvetica, sans-serif;
 }
 
 h1 {
@@ -35,6 +39,8 @@ p {
 canvas {
     background-color: black;
     display: block;
+    width: 100%;
+    height: auto;
 }
 
 #game {
@@ -59,12 +65,17 @@ canvas {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    gap: 50px;
 }
 
 button {
     background-color: orange;
     border-radius: 10px;
+    margin-top: 10px;
+    width: 150px;
+    height: 60px;
+    font-family: 'zabars', Arial, Helvetica, sans-serif;
+    font-size: 25px;
 }
 
 #startscreen {
@@ -85,6 +96,13 @@ button {
     display: none !important;
 }
 
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 .game_description {
     font-family: 'Courier New', Courier, monospace;
     position: absolute;
@@ -92,8 +110,6 @@ button {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    left: -250px;
-    top: 30px;
     gap: 20px;
 }
 
@@ -127,7 +143,7 @@ button {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    
+
 }
 
 #endScreen img {
@@ -147,11 +163,38 @@ button {
     display: none;
 }
 
+#speakerIcon {
+    width: 50px;
+    height: 50px;
+}
+
+.speaker-container {
+    position: relative;
+    display: inline-block;
+}
+
+.line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 45%, transparent 45%, transparent 55%, transparent 55%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.muted .line {
+    background: linear-gradient(45deg, transparent 45%, red 45%, red 55%, transparent 55%);
+}
+
+
 
 /* Smartphones ================== */
 @media only screen and (max-width: 760px) {
     canvas {
-        width: 80vh;
+        width: 100%;
     }
 
     h1 {
@@ -166,22 +209,18 @@ button {
         width: 575px;
     }
 
-    .game_description {
-        width: 100px;
-        height: 150px;
-        left: -120px;
-        top: 80px;
-        font-size: 10px;
-    }
-
     .footer {
         display: none;
     }
 
     .mobile {
         display: flex;
-        gap: 250px;
-        margin-top: -30px;
+        justify-content: center;
+        align-items: center;
+        margin-top: -50px;
+        position: fixed;
+        bottom: 10px;
+        z-index: 99;
     }
 
     .start_game {
@@ -190,74 +229,22 @@ button {
 
     .moveButtons {
         display: flex;
-        margin-top: 20px;
-        gap: 50px;
+    }
+
+    .button_on_description {
+        display: flex;
+        gap: 20px;
     }
 
     .jump_and_throw {
         display: flex;
-        gap: 50px;
     }
 
 }
 
 @media only screen and (max-height: 480px) {
     canvas {
-        height: 80vh;
+        height: 100vh;
     }
 
-    h1 {
-        display: none;
-    }
-
-    .startscreen {
-        height: 80vh;
-    }
-
-    #startscreen img {
-        width: 575px;
-    }
-
-    .game_description {
-        width: 100px;
-        height: 150px;
-        left: -110px;
-        top: 80px;
-        font-size: 10px;
-    }
-
-    .footer {
-        display: none;
-    }
-
-    
-    .mobile {
-        display: flex;
-        gap: 250px;
-    }
-
-    .start_game {
-        margin-top: 10px;
-    }
-
-    .moveButtons {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 50px;
-        margin: 2px;
-    }
-
-    .moveButtons button img {
-        width: 30px;
-        height: 30px;
-    }
-
-    .jump_and_throw {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 30px;
-        
-    }
 }

@@ -66,7 +66,6 @@ class Character extends MoveableObject {
     "img/2_character_pepe/1_idle/long_idle/I-20.png",
   ];
 
-
   constructor() {
     super().loadImage("img/2_character_pepe/2_walk/W-21.png");
     this.loadImages(this.IMAGES_WALKING);
@@ -77,7 +76,6 @@ class Character extends MoveableObject {
     this.applyGravity();
     this.animate();
   }
-
 
   animate() {
     let character = this;
@@ -98,7 +96,6 @@ class Character extends MoveableObject {
     ];
   }
 
-
   handleMovement() {
     walking_sound.pause();
     if (this.canMoveRight()) {
@@ -116,21 +113,17 @@ class Character extends MoveableObject {
     }
   }
 
-
   canMoveRight() {
-   return this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x
+    return this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x;
   }
-
 
   canMoveLeft() {
-    return this.world.keyboard.LEFT && this.x > 0
+    return this.world.keyboard.LEFT && this.x > 0;
   }
-  
 
   canJump() {
-    return this.world.keyboard.SPACE && !this.isInAir()
+    return this.world.keyboard.SPACE && !this.isInAir();
   }
-
 
   handleActions() {
     if (this.isDead()) {
@@ -146,13 +139,11 @@ class Character extends MoveableObject {
     }
   }
 
-
   handleIdle() {
     if (this.isIdle()) {
       this.playAnimation(this.IMAGES_IDLE);
     }
   }
-
 
   stopIntervals() {
     if (this.intervalIds) {
@@ -160,17 +151,18 @@ class Character extends MoveableObject {
     }
   }
 
-
   jump() {
     this.speedY = 30;
   }
 
+  littleJump() {
+    this.speedY = 10;
+  }
 
   moveRight() {
     this.x += this.speed;
     walking_sound.play();
   }
-
 
   isIdle() {
     return (
@@ -181,11 +173,9 @@ class Character extends MoveableObject {
     );
   }
 
-
   isDead() {
     return this.energy == 0;
   }
-
 
   isHurt() {
     let timepassed = new Date().getTime() - this.lastHit; // Differenz im ms
@@ -193,7 +183,6 @@ class Character extends MoveableObject {
     return timepassed < 1;
   }
 
-  
   showGameOverScreen() {
     this.stopIntervals();
     document.getElementById("gameOver").classList.remove("d-none");

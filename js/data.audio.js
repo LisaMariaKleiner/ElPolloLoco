@@ -6,6 +6,7 @@ let deadSound = new Audio("sounds/dead.mp3");
 let painSound = new Audio("sounds/pain.mp3");
 let chickenSound = new Audio("sounds/chickensound.mp3");
 
+
 let sounds = [
   endBossMusic,
   endbossKilled,

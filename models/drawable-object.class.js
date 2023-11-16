@@ -19,11 +19,9 @@ class DrawableObject {
     }
   }
 
-
   isImageLoaded() {
     return this.img && this.img.complete;
   }
-  
 
   loadImages(array) {
     array.forEach((path) => {
@@ -43,6 +41,4 @@ class DrawableObject {
       ctx.stroke();
     }
   }*/
-
-  
 }

@@ -23,17 +23,32 @@ function init() {
   world = new World(canvas, keyboard);
 }
 
+
 function muteToggle() {
-  sounds.forEach((element) => (element.muted = !element.muted));
-  document.getElementById("muteButton").blur(); // Fokus entfernen
+  var speakerIcon = document.getElementById("speakerIcon");
+  var isMuted = sounds[0].muted;
+  sounds.forEach((element) => (element.muted = !isMuted));
+  speakerIcon.parentElement.classList.toggle("muted", !isMuted);
+  document.getElementById("muteButton").blur();
 }
+
+
+function toggleDirections() {
+  let directions = document.getElementById('description');
+  let startscreen = document.getElementById('startscreen');
+  if (directions && startscreen) {
+      startscreen.classList.toggle('d-none');
+      directions.classList.toggle('d-none');
+  }
+}
+
 
 function fullscreen() {
   let fullscreen = document.getElementById("fullscreen");
   openFullscreen(fullscreen);
 }
 
-/* Get the documentElement (<html>) to display the page in fullscreen */
+
 let elem = document.getElementById("fullscreen");
 
 /* View in fullscreen */

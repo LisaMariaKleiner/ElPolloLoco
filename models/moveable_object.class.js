@@ -9,7 +9,6 @@ class MoveableObject extends DrawableObject {
   coins = [];
   bottles = [];
 
-   
   playAnimation(images) {
     let i = this.currentImage % images.length;
     let path = images[i];
@@ -17,7 +16,6 @@ class MoveableObject extends DrawableObject {
     this.currentImage++;
   }
 
-  // Charakter fällt runter
   applyGravity() {
     setInterval(() => {
       if (this.isInAir() || this.speedY > 0) {
@@ -27,7 +25,6 @@ class MoveableObject extends DrawableObject {
     }, 1000 / 25);
   }
 
-  // Charakter befindet sich in der Luft
   isInAir() {
     if (this instanceof ThrowableObject) {
       return true;
@@ -36,7 +33,6 @@ class MoveableObject extends DrawableObject {
     }
   }
 
-  // Charakter kollidiert mit Chicken?
   isColliding(mo) {
     return (
       this.x + this.width >= mo.x &&
@@ -78,6 +74,4 @@ class MoveableObject extends DrawableObject {
   moveLeft() {
     this.x -= this.speed;
   }
-
-  
 }
