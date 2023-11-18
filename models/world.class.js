@@ -1,3 +1,6 @@
+/**
+ * Represents the game world with characters, enemies, and various elements.
+ */
 class World {
   character = new Character();
   bossBar = new BossBar();
@@ -11,11 +14,17 @@ class World {
   coinBar = new CoinBar(this.collectedCoins);
   bottleBar = new BottleBar(this.collectedBottles);
   throwableObjects = [];
-  collectedCoins = []; 
-  collectedCoinsCounter = 0; 
+  collectedCoins = [];
+  collectedCoinsCounter = 0;
   collectedBottles = [];
   collectedBottlesCounter = 0;
- 
+
+
+  /**
+   * Creates a new World instance.
+   * @param {HTMLCanvasElement} canvas - The HTML canvas element.
+   * @param {Object} keyboard - The keyboard input for the game.
+   */
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
@@ -23,13 +32,20 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
-    
   }
 
+
+  /**
+   * Sets the current world for the main character.
+   */
   setWorld() {
     this.character.world = this;
   }
 
+
+  /**
+   * Runs the game loop.
+   */
   run() {
     setInterval(() => {
       this.checkCollisions();
@@ -41,26 +57,48 @@ class World {
     }, 100);
   }
 
+
+  /**
+   * Checks for throwable objects and throws them if the conditions are met.
+   */
+  lastThrowTime = 0; // Track the time of the last bottle throw
+
   checkThrowObjects() {
-    if (this.keyboard.D && this.collectedBottlesCounter > 0) {
+    const currentTime = Date.now();
+    const throwInterval = 1000; // Set the desired interval between throws in milliseconds
+
+    if (this.keyboard.D && this.collectedBottlesCounter > 0 && currentTime - this.lastThrowTime >= throwInterval) {
       let bottle = new ThrowableObject(
         this.character.x + 100,
         this.character.y + 100
       );
       bottle.hitBoss = false;
       this.throwableObjects.push(bottle);
-      this.collectedBottlesCounter--; // Inkrementieren Sie den Zähler für gesammelte Münzen
+      this.collectedBottlesCounter--;
+      this.lastThrowTime = currentTime; // Update the last throw time
     }
-    this.bottleBar.setBottleCounter(this.collectedBottlesCounter); 
+
+    this.bottleBar.setBottleCounter(this.collectedBottlesCounter);
   }
 
+
+  /**
+   * Checks for collisions between characters and enemies.
+   */
   checkCollisions() {
     this.level.enemies.forEach((enemy, index) => {
-      if (this.character.isColliding(enemy)) {
+      if (
+        this.character.isColliding(enemy) &&
+        this.character.isCollidingTopOfChicken(this.character, enemy)
+      ) {
         if (this.character.isInAir()) {
           this.character.littleJump();
           enemy.animate();
-          this.deleteThisEnemy(index);
+          setTimeout(() => {
+            if (this.level.enemies[index] === enemy) {
+              this.deleteEnemy(index);
+            }
+          }, 500);
         } else {
           this.character.hit();
           this.statusBar.setPercentage(this.character.energy);
@@ -68,38 +106,50 @@ class World {
       }
     });
   }
-  
 
-  deleteThisEnemy(index) {
+
+  /**
+   * Deletes an enemy from the level.
+   * @param {number} index - The index of the enemy to delete.
+   */
+  deleteEnemy(index) {
     this.level.enemies.splice(index, 1);
   }
 
-  
+
+  /**
+   * Checks if throwable objects hit the end boss and updates the boss's health.
+   */
   checkHitBossWithBottle() {
     this.throwableObjects.forEach((bottle) => {
       if (this.bottleCollidingWithChicken(bottle, this.level.endBoss[0])) {
-        console.log("Bottle Colliding with endboss");
         if (!bottle.hitBoss) {
           this.level.endBoss[0].hitBoss();
           bottle.hitBoss = true; // Markiere die Flasche als getroffen
-          console.log(`Energy=`, this.level.endBoss[0].bossEnergy);
           this.bossBar.setBossPercentage(this.level.endBoss[0].bossEnergy);
         }
       }
     });
   }
 
+
+  /**
+   * Checks for collisions between throwable objects and enemies, removing the enemy if hit.
+   */
   checkCollisionsBottleAndChicken() {
     this.throwableObjects.forEach((bottle) => {
       this.level.enemies.forEach((enemy, index) => {
         if (this.bottleCollidingWithChicken(bottle, enemy)) {
-          enemy.chickenIsDead();
           this.level.enemies.splice(index, 1);
         }
       });
     });
   }
 
+
+   /**
+   * Checks for collisions between the main character and coins, updating the coin counter.
+   */
   checkCollisionsWithCoins() {
     let character = this.character;
     let coinsToRemove = [];
@@ -112,12 +162,16 @@ class World {
       let index = this.level.coins.indexOf(coin);
       if (index !== -1) {
         this.level.coins.splice(index, 1);
-        this.collectedCoinsCounter++; // Inkrementieren Sie den Zähler für gesammelte Münzen.
+        this.collectedCoinsCounter++;
       }
     });
-    this.coinBar.setCoinCounter(this.collectedCoinsCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
+    this.coinBar.setCoinCounter(this.collectedCoinsCounter); 
   }
 
+
+  /**
+   * Checks for collisions between the main character and bottles, updating the bottle counter.
+   */
   checkCollisionsWithBottles() {
     let character = this.character;
     let bottlesToRemove = [];
@@ -130,12 +184,19 @@ class World {
       let index = this.level.bottles.indexOf(bottle);
       if (index !== -1) {
         this.level.bottles.splice(index, 1);
-        this.collectedBottlesCounter++; // Inkrementieren Sie den Zähler für gesammelte Münzen.
+        this.collectedBottlesCounter++;
       }
     });
-    this.bottleBar.setBottleCounter(this.collectedBottlesCounter); // Aktualisieren Sie die CoinBar mit dem Zähler.
+    this.bottleBar.setBottleCounter(this.collectedBottlesCounter);
   }
 
+
+  /**
+   * Checks if a throwable object collides with an enemy (chicken).
+   * @param {ThrowableObject} bottle - The throwable object (bottle).
+   * @param {Chicken} enemies - The enemy (chicken).
+   * @returns {boolean} True if collision occurs, otherwise false.
+   */
   bottleCollidingWithChicken(bottle, enemies) {
     return (
       bottle.x + bottle.width >= enemies.x &&
@@ -145,6 +206,10 @@ class World {
     );
   }
 
+
+  /**
+   * Draws the boss image on the canvas.
+   */
   drawBossImage() {
     let bossImage = new DrawableObject();
     bossImage.loadImage(["img/7_statusbars/3_icons/icon_health_endboss.png"]);
@@ -155,23 +220,27 @@ class World {
     this.addToMap(bossImage);
   }
 
+
+   /**
+   * Draws the status bar, coin bar, and bottle bar on the canvas.
+   */
   drawStatusBar() {
     this.addToMap(this.bottleBar);
     this.addToMap(this.statusBar);
     this.addToMap(this.coinBar);
   }
 
+
+  /**
+   * Draws objects on the canvas and initiates animation frames.
+   */
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas clearen!, sonst erscheint der Charakter mehrmals im Bildschirm
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgrounds);
-
     this.ctx.translate(-this.camera_x, 0);
-    // -------- Space for fixed objects --------
     this.drawStatusBar();
-
     this.ctx.translate(this.camera_x, 0);
-
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.level.enemies);
@@ -181,48 +250,58 @@ class World {
     this.addObjectsToMap(this.throwableObjects);
     this.addToMap(this.bossBar);
     this.drawBossImage();
-
     this.ctx.translate(-this.camera_x, 0);
-    // Mit " this.draw" würde es eine unendlichschleife geben und wsl der PC abstürzen
-    let self = this; // Neue Variable für this erstellen, weil er darauf jetzt nicht mehr zugreifen kann
+    let self = this; 
     requestAnimationFrame(function () {
-      // requestAnimationFrame ruft vor jedem erneuten Rendern (»Refresh«) des Browserfensters die Animations-Funktion auf und erzeugt so einen weichen Übergang von einem Frame zum nächsten. Mit requestAnimationFrame anstelle von setInterval oder setTimeout übernimmt der Browser die Schnittstelle und optimiert das Verfahren, so dass Animationen runder, ohne Ruckeln und effizienter ablaufen.
-      self.draw(); // self führt jetzt die Funktion draw() aus.
+      self.draw(); 
     });
   }
 
+
+  /**
+   * Adds movable objects to the canvas.
+   * @param {Array<MoveableObject>} objects - The array of movable objects to add.
+   */
   addObjectsToMap(objects) {
     objects.forEach((o) => {
-      this.addToMap(o); // Die jeweiligen Objekte die oben definiert sind der Map hinzufügen
+      this.addToMap(o); 
     });
   }
 
-  // Fügt MovableObjects ins Canvas ein
+  
+  /**
+   * Draws movable objects on the canvas.
+   * @param {MoveableObject} mo - The movable object to draw.
+   */
   addToMap(mo) {
     if (mo.otherDirection) {
-      // MoveableObject.andereRichtung
       this.flipImage(mo);
     }
-
     mo.draw(this.ctx);
-    //mo.drawFrame(this.ctx);
-
     if (mo.otherDirection) {
       this.flipImageBack(mo);
     }
   }
 
-  // Spiegelt das Bild
+  /**
+   * Flips the image for a movable object.
+   * @param {MoveableObject} mo - The movable object to flip.
+   */
   flipImage(mo) {
     this.ctx.save();
-    this.ctx.translate(mo.width, 0); // Bild spiegelverkehrt anzeigen
-    this.ctx.scale(-1, 1); // Bild spiegelverkehrt anzeigen
-    mo.x = mo.x * -1; // Die X achse dreht sich
+    this.ctx.translate(mo.width, 0);
+    this.ctx.scale(-1, 1);
+    mo.x = mo.x * -1; 
   }
 
-  // Spiegelt es wieder zurück
+
+
+  /**
+   * Flips the image back for a movable object.
+   * @param {MoveableObject} mo - The movable object to flip back.
+   */
   flipImageBack(mo) {
-    mo.x = mo.x * -1; // X achse wieder in Ursprungszustand setzen
+    mo.x = mo.x * -1;
     this.ctx.restore();
   }
 }

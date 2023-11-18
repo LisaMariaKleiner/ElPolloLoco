@@ -1,3 +1,7 @@
+/**
+ * Class representing a throwable object in the game.
+ * @extends MoveableObject
+ */
 class ThrowableObject extends MoveableObject {
   SALSA_IMAGES = [
     "img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
@@ -6,6 +10,12 @@ class ThrowableObject extends MoveableObject {
     "img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png",
   ];
 
+
+  /**
+   * Creates a new ThrowableObject instance.
+   * @param {number} x - The initial x-coordinate of the throwable object.
+   * @param {number} y - The initial y-coordinate of the throwable object.
+   */
   constructor(x, y) {
     super().loadImage(this.SALSA_IMAGES[0]);
     this.loadImages(this.SALSA_IMAGES);
@@ -16,6 +26,10 @@ class ThrowableObject extends MoveableObject {
     this.throw();
   }
 
+
+  /**
+   * Initiates the throwing action, applying speed and gravity.
+   */
   throw() {
       this.speedY = 30;
       this.applyGravity();

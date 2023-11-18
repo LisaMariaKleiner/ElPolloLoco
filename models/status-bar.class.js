@@ -1,3 +1,7 @@
+/**
+ * Class representing a status bar in the game.
+ * @extends DrawableObject
+ */
 class StatusBar extends DrawableObject {
   IMAGES_HEALTH = [
     "img/7_statusbars/1_statusbar/2_statusbar_health/green/0.png",
@@ -21,6 +25,10 @@ class StatusBar extends DrawableObject {
   }
 
 
+  /**
+   * Sets the percentage value of the status bar.
+   * @param {number} percentage - The new percentage value.
+   */
   setPercentage(percentage) {
     this.percentage = percentage;
     let path = this.IMAGES_HEALTH[this.resolveImageIndex()];
@@ -28,6 +36,10 @@ class StatusBar extends DrawableObject {
   }
 
 
+  /**
+   * Resolves the index of the image based on the current percentage.
+   * @returns {number} The index of the image in the IMAGES_HEALTH array.
+   */
   resolveImageIndex() {
     if (this.percentage == 100) {
       return 5;

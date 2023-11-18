@@ -1,3 +1,6 @@
+/**
+ * Represents a character in the game that extends the MoveableObject class.
+ */
 class Character extends MoveableObject {
   height = 250;
   width = 120;
@@ -77,6 +80,10 @@ class Character extends MoveableObject {
     this.animate();
   }
 
+
+  /**
+   * Initiates animation intervals for character movement, actions, and idle state.
+   */
   animate() {
     let character = this;
     let movementIntervalId = setInterval(() => {
@@ -96,6 +103,10 @@ class Character extends MoveableObject {
     ];
   }
 
+
+  /**
+   * Handles character movement based on keyboard input.
+   */
   handleMovement() {
     walking_sound.pause();
     if (this.canMoveRight()) {
@@ -113,18 +124,38 @@ class Character extends MoveableObject {
     }
   }
 
+
+  /**
+   * Checks if the character can move to the right.
+   *
+   * @returns {boolean} - True if the character can move to the right, false otherwise.
+   */
   canMoveRight() {
     return this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x;
   }
 
+
+  /**
+   * Checks if the character can move to the left.
+   *
+   * @returns {boolean} - True if the character can move to the left, false otherwise.
+   */
   canMoveLeft() {
     return this.world.keyboard.LEFT && this.x > 0;
   }
 
+  /**
+   * Checks if the character can jump.
+   *
+   * @returns {boolean} - True if the character can jump, false otherwise.
+   */
   canJump() {
     return this.world.keyboard.SPACE && !this.isInAir();
   }
 
+  /**
+   * Handles character actions such as playing animations for walking, jumping, hurting, and being dead.
+   */
   handleActions() {
     if (this.isDead()) {
       deadSound.play();
@@ -139,31 +170,52 @@ class Character extends MoveableObject {
     }
   }
 
+
+  /**
+   * Handles character idle state by playing idle animations.
+   */
   handleIdle() {
     if (this.isIdle()) {
       this.playAnimation(this.IMAGES_IDLE);
     }
   }
 
+  /**
+   * Stops all animation intervals
+   **/
   stopIntervals() {
     if (this.intervalIds) {
       this.intervalIds.forEach((id) => clearInterval(id));
     }
   }
 
+  /**
+   * Initiates a high jump by setting the vertical speed to 30.
+   */
   jump() {
     this.speedY = 30;
   }
 
+  /**
+   * Initiates a short jump by setting the vertical speed to 10.
+   */
   littleJump() {
     this.speedY = 10;
   }
 
+  /**
+   * Moves the character to the right by updating its x-coordinate and playing walking sounds.
+   */
   moveRight() {
     this.x += this.speed;
     walking_sound.play();
   }
 
+  /**
+   * Checks if the character is in an idle state.
+   *
+   * @returns {boolean} - True if the character is idle, false otherwise.
+   */
   isIdle() {
     return (
       this.world.keyboard.RIGHT == false &&
@@ -173,16 +225,32 @@ class Character extends MoveableObject {
     );
   }
 
+
+  /**
+   * Checks if the character is dead based on its energy level.
+   *
+   * @returns {boolean} - True if the character is dead, false otherwise.
+   */
   isDead() {
     return this.energy == 0;
   }
 
+
+  /**
+   * Checks if the character is hurt based on the time elapsed since the last hit.
+   *
+   * @returns {boolean} - True if the character is hurt, false otherwise.
+   */
   isHurt() {
     let timepassed = new Date().getTime() - this.lastHit; // Differenz im ms
     timepassed = timepassed / 1000; // Differenz in sek
     return timepassed < 1;
   }
 
+
+   /**
+   * Displays the game over screen, stops all animation intervals, and updates the UI.
+   */
   showGameOverScreen() {
     this.stopIntervals();
     document.getElementById("gameOver").classList.remove("d-none");

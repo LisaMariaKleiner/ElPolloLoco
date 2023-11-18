@@ -1,5 +1,7 @@
+/**
+ * Represents a coin counter bar in the game that extends the DrawableObject class.
+ */
 class CoinBar extends DrawableObject {
-  
   IMAGES_CoinCounter = [
     "img/7_statusbars/1_statusbar/1_statusbar_coin/blue/0.png",
     "img/7_statusbars/1_statusbar/1_statusbar_coin/blue/20.png",
@@ -9,11 +11,22 @@ class CoinBar extends DrawableObject {
     "img/7_statusbars/1_statusbar/1_statusbar_coin/blue/100.png",
   ];
 
-  coinCounter = 0; // Initialisiere coinCounter mit 0
+  /**
+   * The current count of collected coins.
+   *
+   * @type {number}
+   * @default 0
+   */
+  coinCounter = 0;
 
+  /**
+   * Creates an instance of the CoinBar class.
+   *
+   * @param {number} collectedCoins - The initial count of collected coins.
+   */
   constructor(collectedCoins) {
     super();
-    this.collectedCoins = collectedCoins; // Setze collectedCoins in der CoinBar-Klasse
+    this.collectedCoins = collectedCoins;
     this.loadImages(this.IMAGES_CoinCounter);
     this.x = 20;
     this.y = 30;
@@ -22,16 +35,24 @@ class CoinBar extends DrawableObject {
     this.setCoinCounter();
   }
 
+  /**
+   * Sets the current coin counter and updates the displayed image.
+   *
+   * @param {number} counter - The new count of collected coins.
+   */
   setCoinCounter(counter) {
-    this.coinCounter = counter; // Verwende den übergebenen Counter-Wert
+    this.coinCounter = counter;
     const path = this.IMAGES_CoinCounter[this.resolveImageIndexCoins(counter)];
     this.img = this.imageCache[path];
   }
-  
-  
 
+  /**
+   * Resolves the image index based on the current coin counter.
+   *
+   * @param {number} coinCounter - The current count of collected coins.
+   * @returns {number} - The index representing the appropriate image for the coin counter.
+   */
   resolveImageIndexCoins(coinCounter) {
-    //console.log(coinCounter);
     if (coinCounter >= 5) {
       return 5;
     } else if (coinCounter === 4) {

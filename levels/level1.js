@@ -1,9 +1,13 @@
 let level1;
 
+
+/**
+ * Initializes the game level, creating instances of game elements such as chickens, clouds, backgrounds,
+ * coins, bottles, and an end boss.
+ */
 function initLevel() {
   level1 = new Level(
     [
-      // Feinde
       new Chicken(),
       new Chicken(),
       new Chicken(),

@@ -1,3 +1,7 @@
+/**
+ * Class representing the Endboss in the game.
+ * @extends MoveableObject
+ */
 class Endboss extends MoveableObject {
   y = 230;
   width = 150;
@@ -52,6 +56,10 @@ class Endboss extends MoveableObject {
     "img/4_enemie_boss_chicken/5_dead/G26.png",
   ];
 
+
+   /**
+   * Creates an instance of the Endboss.
+   */
   constructor() {
     super();
     this.loadImages(this.IMAGES_BOSS_ALERT);
@@ -65,6 +73,10 @@ class Endboss extends MoveableObject {
     this.loadImages(this.IMAGES_BOSS_DEAD);
   }
 
+
+  /**
+   * Animates the movement and actions of the Endboss.
+   */
   animate() {
     let i = 0;
     let walkingInterval;
@@ -101,16 +113,30 @@ class Endboss extends MoveableObject {
     }, 500);
   }
 
+
+  /**
+   * Checks if the boss is dead.
+   * @returns {boolean} True if the boss is dead, otherwise false.
+   */
   bossIsDead() {
     return this.bossEnergy == 0;
   }
 
+
+  /**
+   * Checks if the boss is hurt.
+   * @returns {boolean} True if the boss is hurt, otherwise false.
+   */
   endbossIsHurt() {
-    let bosstimepassed = new Date().getTime() - this.lastBossHit; // Differenz im ms
-    bosstimepassed = bosstimepassed / 1000; // Differenz in sek
+    let bosstimepassed = new Date().getTime() - this.lastBossHit;
+    bosstimepassed = bosstimepassed / 1000; 
     return bosstimepassed < 1;
   }
 
+
+  /**
+   * Shows the win screen when the boss is defeated.
+   */
   showWinScreen() {
     document.getElementById("win").classList.remove("d-none");
     document.getElementById("game").classList.add("d-none");

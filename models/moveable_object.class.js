@@ -1,3 +1,7 @@
+/**
+ * Class representing a movable object in the game.
+ * @extends DrawableObject
+ */
 class MoveableObject extends DrawableObject {
   speed = 0.15;
   otherDirection = false;
@@ -9,6 +13,11 @@ class MoveableObject extends DrawableObject {
   coins = [];
   bottles = [];
 
+
+  /**
+   * Plays animation based on the provided images array.
+   * @param {Array} images - The array of image paths for the animation.
+   */
   playAnimation(images) {
     let i = this.currentImage % images.length;
     let path = images[i];
@@ -16,6 +25,10 @@ class MoveableObject extends DrawableObject {
     this.currentImage++;
   }
 
+
+  /**
+   * Applies gravity to the movable object, simulating vertical movement.
+   */
   applyGravity() {
     setInterval(() => {
       if (this.isInAir() || this.speedY > 0) {
@@ -25,6 +38,11 @@ class MoveableObject extends DrawableObject {
     }, 1000 / 25);
   }
 
+
+  /**
+   * Checks if the object is in the air.
+   * @returns {boolean} True if the object is in the air, otherwise false.
+   */
   isInAir() {
     if (this instanceof ThrowableObject) {
       return true;
@@ -33,6 +51,12 @@ class MoveableObject extends DrawableObject {
     }
   }
 
+
+  /**
+   * Checks if the object is colliding with another movable object.
+   * @param {MoveableObject} mo - The other movable object.
+   * @returns {boolean} True if colliding, otherwise false.
+   */
   isColliding(mo) {
     return (
       this.x + this.width >= mo.x &&
@@ -42,17 +66,29 @@ class MoveableObject extends DrawableObject {
     );
   }
 
+
+  /**
+   * Checks if the character is colliding with the top of the chicken.
+   * @param {Character} character - The game character.
+   * @param {Chicken} chicken - The chicken object.
+   * @returns {boolean} True if colliding on the top, otherwise false.
+   */
   isCollidingTopOfChicken(character, chicken) {
     let notCollidingOnX =
       character.x + character.width < chicken.x ||
       character.x > chicken.x + chicken.width;
-    let notCollidingOnY = character.y + character.height < chicken.y;
+    let characterBottomAboveChickenTop = character.y + character.height < chicken.y;
     let topCollidingOnY =
       character.y + character.height >= chicken.y &&
       character.y <= chicken.y + chicken.height;
-    return !(notCollidingOnX || notCollidingOnY) && topCollidingOnY;
+  
+    return !(notCollidingOnX || characterBottomAboveChickenTop) && topCollidingOnY;
   }
+  
 
+   /**
+   * Hits the boss object, reducing its energy.
+   */
   hitBoss() {
     if (this.bossEnergy > 0) {
       this.bossEnergy -= 25;
@@ -62,6 +98,10 @@ class MoveableObject extends DrawableObject {
     }
   }
 
+
+  /**
+   * Hits the movable object, reducing its energy.
+   */
   hit() {
     this.energy -= 5;
     if (this.energy < 0) {
@@ -71,6 +111,10 @@ class MoveableObject extends DrawableObject {
     }
   }
 
+
+  /**
+   * Moves the object to the left.
+   */
   moveLeft() {
     this.x -= this.speed;
   }

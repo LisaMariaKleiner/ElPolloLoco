@@ -1,3 +1,6 @@
+/**
+ * Represents a bottle object in the game that extends the MoveableObject class.
+ */
 class Bottles extends MoveableObject {
 
     width = 60;

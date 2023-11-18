@@ -1,3 +1,6 @@
+/**
+ * Represents a drawable object in the game.
+ */
 class DrawableObject {
   img;
   imageCache = {};
@@ -7,22 +10,39 @@ class DrawableObject {
   height = 250;
   width = 120;
 
-  //z.B loadImage('img/testbild.png') -> Das bild ist jetzt der Pfad.
   loadImage(path) {
-    this.img = new Image(); // this.img = document.getElementById('image') oder wie -> <img id="image" src="">
+    this.img = new Image();
     this.img.src = path;
   }
 
+
+  /**
+   * Draws the drawable object on the provided canvas context (ctx).
+   *
+   * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+   */
   draw(ctx) {
     if (this.isImageLoaded()) {
       ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
   }
 
+
+  /**
+   * Checks if the image is loaded.
+   *
+   * @returns {boolean} - True if the image is loaded, false otherwise.
+   */
   isImageLoaded() {
     return this.img && this.img.complete;
   }
 
+
+  /**
+   * Loads an array of images and stores them in the image cache.
+   *
+   * @param {string[]} array - An array of image paths to be loaded.
+   */
   loadImages(array) {
     array.forEach((path) => {
       let img = new Image();
@@ -30,15 +50,4 @@ class DrawableObject {
       this.imageCache[path] = img;
     });
   }
-
-  /*drawFrame(ctx) {
-    if (this instanceof Character || this instanceof Chicken || this instanceof Endboss) {
-      // Frame nur bei Charakter und Chicken anwenden
-      ctx.beginPath();
-      ctx.lineWidth = "3";
-      ctx.strokeStyle = "pink";
-      ctx.rect(this.x, this.y, this.width, this.height);
-      ctx.stroke();
-    }
-  }*/
 }
