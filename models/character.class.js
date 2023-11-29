@@ -95,7 +95,7 @@ class Character extends MoveableObject {
     }, 50);
     let idleIntervalId = setInterval(() => {
       character.handleIdle();
-    }, 4000);
+    }, 500);
     character.intervalIds = [
       movementIntervalId,
       actionIntervalId,
