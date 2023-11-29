@@ -61,11 +61,11 @@ class World {
   /**
    * Checks for throwable objects and throws them if the conditions are met.
    */
-  lastThrowTime = 0; // Track the time of the last bottle throw
+  lastThrowTime = 0; 
 
   checkThrowObjects() {
     const currentTime = Date.now();
-    const throwInterval = 1000; // Set the desired interval between throws in milliseconds
+    const throwInterval = 1000;
 
     if (this.keyboard.D && this.collectedBottlesCounter > 0 && currentTime - this.lastThrowTime >= throwInterval) {
       let bottle = new ThrowableObject(
@@ -75,7 +75,7 @@ class World {
       bottle.hitBoss = false;
       this.throwableObjects.push(bottle);
       this.collectedBottlesCounter--;
-      this.lastThrowTime = currentTime; // Update the last throw time
+      this.lastThrowTime = currentTime; 
     }
 
     this.bottleBar.setBottleCounter(this.collectedBottlesCounter);
@@ -88,8 +88,8 @@ class World {
   checkCollisions() {
     this.level.enemies.forEach((enemy, index) => {
       if (
-        this.character.isColliding(enemy) &&
-        this.character.isCollidingTopOfChicken(this.character, enemy)
+        this.character.isColliding(enemy) /*&&
+        this.character.isCollidingTopOfChicken(this.character, enemy)*/
       ) {
         if (this.character.isInAir()) {
           this.character.littleJump();
@@ -125,7 +125,7 @@ class World {
       if (this.bottleCollidingWithChicken(bottle, this.level.endBoss[0])) {
         if (!bottle.hitBoss) {
           this.level.endBoss[0].hitBoss();
-          bottle.hitBoss = true; // Markiere die Flasche als getroffen
+          bottle.hitBoss = true; 
           this.bossBar.setBossPercentage(this.level.endBoss[0].bossEnergy);
         }
       }
