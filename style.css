@@ -79,6 +79,7 @@ canvas {
     height: 30px;
     font-family: 'zabars', Arial, Helvetica, sans-serif;
     font-size: 25px;
+    cursor: pointer;
 }
 
 .jump_and_throw button {
@@ -92,6 +93,7 @@ canvas {
     height: 30px;
     font-family: 'zabars', Arial, Helvetica, sans-serif;
     font-size: 25px;
+    cursor: pointer;
 }
 
 .jump_and_throw button img {
@@ -111,6 +113,7 @@ button {
     height: 50px;
     font-family: 'zabars', Arial, Helvetica, sans-serif;
     font-size: 25px;
+    cursor: pointer;
 }
 
 button img {
@@ -308,11 +311,13 @@ button img {
 
     .moveButtons {
         display: flex;
+        cursor: pointer;
     }
 
     .button_on_description {
         display: flex;
         gap: 20px;
+        cursor: pointer;
     }
 
     .jump_and_throw {

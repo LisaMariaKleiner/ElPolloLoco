@@ -13,6 +13,8 @@ class MoveableObject extends DrawableObject {
   coins = [];
   bottles = [];
 
+ 
+
   /**
    * Defines the offset properties for collision detection.
    * @type {{top: number, right: number, bottom: number, left: number}}

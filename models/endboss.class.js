@@ -108,7 +108,7 @@ class Endboss extends MoveableObject {
         endbossKilled.play();
         setTimeout(() => {
           this.showWinScreen();
-        }, 2000);
+        }, 1000);
       }
     }, 500);
   }

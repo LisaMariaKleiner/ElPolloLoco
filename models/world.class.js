@@ -19,7 +19,6 @@ class World {
   collectedBottles = [];
   collectedBottlesCounter = 0;
 
-
   /**
    * Creates a new World instance.
    * @param {HTMLCanvasElement} canvas - The HTML canvas element.
@@ -34,14 +33,12 @@ class World {
     this.run();
   }
 
-
   /**
    * Sets the current world for the main character.
    */
   setWorld() {
     this.character.world = this;
   }
-
 
   /**
    * Runs the game loop.
@@ -54,20 +51,23 @@ class World {
       this.checkCollisionsWithBottles();
       this.checkCollisionsBottleAndChicken();
       this.checkHitBossWithBottle();
-    }, 100);
+    }, 50);
   }
-
 
   /**
    * Checks for throwable objects and throws them if the conditions are met.
    */
-  lastThrowTime = 0; 
+  lastThrowTime = 0;
 
   checkThrowObjects() {
     const currentTime = Date.now();
     const throwInterval = 1000;
 
-    if (this.keyboard.D && this.collectedBottlesCounter > 0 && currentTime - this.lastThrowTime >= throwInterval) {
+    if (
+      this.keyboard.D &&
+      this.collectedBottlesCounter > 0 &&
+      currentTime - this.lastThrowTime >= throwInterval
+    ) {
       let bottle = new ThrowableObject(
         this.character.x + 100,
         this.character.y + 100
@@ -75,12 +75,11 @@ class World {
       bottle.hitBoss = false;
       this.throwableObjects.push(bottle);
       this.collectedBottlesCounter--;
-      this.lastThrowTime = currentTime; 
+      this.lastThrowTime = currentTime;
     }
 
     this.bottleBar.setBottleCounter(this.collectedBottlesCounter);
   }
-
 
   /**
    * Checks for collisions between characters and enemies.
@@ -107,7 +106,6 @@ class World {
     });
   }
 
-
   /**
    * Deletes an enemy from the level.
    * @param {number} index - The index of the enemy to delete.
@@ -115,7 +113,6 @@ class World {
   deleteEnemy(index) {
     this.level.enemies.splice(index, 1);
   }
-
 
   /**
    * Checks if throwable objects hit the end boss and updates the boss's health.
@@ -125,13 +122,22 @@ class World {
       if (this.bottleCollidingWithChicken(bottle, this.level.endBoss[0])) {
         if (!bottle.hitBoss) {
           this.level.endBoss[0].hitBoss();
-          bottle.hitBoss = true; 
+          bottle.hitBoss = true;
           this.bossBar.setBossPercentage(this.level.endBoss[0].bossEnergy);
+          if (bottle instanceof Bottles) {
+            bottle.bottleSplash(
+              this.level.endBoss[0].x,
+              this.level.endBoss[0].y
+            );
+          }
+          let bottleIndex = this.throwableObjects.indexOf(bottle);
+          if (bottleIndex !== -1) {
+            this.throwableObjects.splice(bottleIndex, 1);
+          }
         }
       }
     });
   }
-
 
   /**
    * Checks for collisions between throwable objects and enemies, removing the enemy if hit.
@@ -146,8 +152,7 @@ class World {
     });
   }
 
-
-   /**
+  /**
    * Checks for collisions between the main character and coins, updating the coin counter.
    */
   checkCollisionsWithCoins() {
@@ -165,9 +170,8 @@ class World {
         this.collectedCoinsCounter++;
       }
     });
-    this.coinBar.setCoinCounter(this.collectedCoinsCounter); 
+    this.coinBar.setCoinCounter(this.collectedCoinsCounter);
   }
-
 
   /**
    * Checks for collisions between the main character and bottles, updating the bottle counter.
@@ -190,7 +194,6 @@ class World {
     this.bottleBar.setBottleCounter(this.collectedBottlesCounter);
   }
 
-
   /**
    * Checks if a throwable object collides with an enemy (chicken).
    * @param {ThrowableObject} bottle - The throwable object (bottle).
@@ -206,7 +209,6 @@ class World {
     );
   }
 
-
   /**
    * Draws the boss image on the canvas.
    */
@@ -220,8 +222,7 @@ class World {
     this.addToMap(bossImage);
   }
 
-
-   /**
+  /**
    * Draws the status bar, coin bar, and bottle bar on the canvas.
    */
   drawStatusBar() {
@@ -229,7 +230,6 @@ class World {
     this.addToMap(this.statusBar);
     this.addToMap(this.coinBar);
   }
-
 
   /**
    * Draws objects on the canvas and initiates animation frames.
@@ -251,12 +251,11 @@ class World {
     this.addToMap(this.bossBar);
     this.drawBossImage();
     this.ctx.translate(-this.camera_x, 0);
-    let self = this; 
+    let self = this;
     requestAnimationFrame(function () {
-      self.draw(); 
+      self.draw();
     });
   }
-
 
   /**
    * Adds movable objects to the canvas.
@@ -264,11 +263,10 @@ class World {
    */
   addObjectsToMap(objects) {
     objects.forEach((o) => {
-      this.addToMap(o); 
+      this.addToMap(o);
     });
   }
 
-  
   /**
    * Draws movable objects on the canvas.
    * @param {MoveableObject} mo - The movable object to draw.
@@ -291,10 +289,8 @@ class World {
     this.ctx.save();
     this.ctx.translate(mo.width, 0);
     this.ctx.scale(-1, 1);
-    mo.x = mo.x * -1; 
+    mo.x = mo.x * -1;
   }
-
-
 
   /**
    * Flips the image back for a movable object.
