@@ -85,11 +85,8 @@ class World {
    * Checks for collisions between characters and enemies.
    */
   checkCollisions() {
-    this.level.enemies.forEach((enemy, index) => {
-      if (
-        this.character.isColliding(enemy) /*&&
-        this.character.isCollidingTopOfChicken(this.character, enemy)*/
-      ) {
+    this.level.enemies.concat(this.level.endBoss).forEach((enemy, index) => {
+      if (this.character.isColliding(enemy)) {
         if (this.character.isInAir()) {
           this.character.littleJump();
           enemy.animate();
@@ -124,16 +121,18 @@ class World {
           this.level.endBoss[0].hitBoss();
           bottle.hitBoss = true;
           this.bossBar.setBossPercentage(this.level.endBoss[0].bossEnergy);
-          if (bottle instanceof Bottles) {
+          if (bottle instanceof ThrowableObject) {
             bottle.bottleSplash(
               this.level.endBoss[0].x,
               this.level.endBoss[0].y
             );
           }
-          let bottleIndex = this.throwableObjects.indexOf(bottle);
-          if (bottleIndex !== -1) {
-            this.throwableObjects.splice(bottleIndex, 1);
-          }
+          setTimeout(() => {
+            let bottleIndex = this.throwableObjects.indexOf(bottle);
+            if (bottleIndex !== -1) {
+              this.throwableObjects.splice(bottleIndex, 1);
+            }
+          }, 1000);
         }
       }
     });
