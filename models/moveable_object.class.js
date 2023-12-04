@@ -20,10 +20,17 @@ class MoveableObject extends DrawableObject {
    * @type {{top: number, right: number, bottom: number, left: number}}
    */
   offset = {
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
+    top: 20,
+    right: 20,
+    bottom: 20,
+    left: 20,
+  };
+
+  offset1 = {
+    top: 10,
+    right: 10,
+    bottom: 10,
+    left: 10,
   };
 
   /**
@@ -75,6 +82,20 @@ class MoveableObject extends DrawableObject {
       this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom
     );
   }
+
+  isCollidingEnemy(mo) {
+    let isHorizontalCollision =
+      this.x + this.width - this.offset1.right > mo.x + mo.offset1.left &&
+      this.x + this.offset1.left < mo.x + mo.width - mo.offset1.right;
+  
+    let isVerticalCollision =
+      this.y + this.height - this.offset1.bottom > mo.y + mo.offset1.top &&
+      this.y + this.offset1.top < mo.y + mo.height - mo.offset1.bottom;
+  
+    // Kollision nur dann als true zurückgeben, wenn es eine vertikale Kollision gibt
+    return isHorizontalCollision && isVerticalCollision;
+  }
+  
 
   
 

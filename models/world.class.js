@@ -18,6 +18,7 @@ class World {
   collectedCoinsCounter = 0;
   collectedBottles = [];
   collectedBottlesCounter = 0;
+  invincible = false;
 
   /**
    * Creates a new World instance.
@@ -86,16 +87,22 @@ class World {
    */
   checkCollisions() {
     this.level.enemies.concat(this.level.endBoss).forEach((enemy, index) => {
-      if (this.character.isColliding(enemy)) {
-        if (this.character.isInAir()) {
+      if (this.character.isCollidingEnemy(enemy)) {
+        if (
+          this.character.isInAir() &&
+          this.character.speedY < 0 &&
+          enemy.energy != 0 &&
+          this.invincible == false
+        ) {
           this.character.littleJump();
           enemy.animate();
+          enemy.energy = 0;
           setTimeout(() => {
             if (this.level.enemies[index] === enemy) {
               this.deleteEnemy(index);
             }
           }, 500);
-        } else {
+        } else if (enemy.energy != 0 && this.invincible == false) {
           this.character.hit();
           this.statusBar.setPercentage(this.character.energy);
         }

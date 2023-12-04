@@ -5,6 +5,8 @@ class Chicken extends MoveableObject {
   y = 370;
   width = 60;
   height = 60;
+  energy = 1;
+
 
   chickenMovedLeft = setInterval(() => {
     this.moveLeft();
@@ -34,6 +36,7 @@ class Chicken extends MoveableObject {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_CHICKEN_DEAD);
+    
     if (isBackChicken) {
       this.x = 1200 + Math.random() * 1000;
     } else {

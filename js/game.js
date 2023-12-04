@@ -78,7 +78,7 @@ function toggleDirections() {
 /**
  * Opens the game in fullscreen mode.
  */
-function fullscreen() {
+/*function fullscreen() {
   let fullscreen = document.getElementById("fullscreen");
   openFullscreen(fullscreen);
 }
@@ -90,6 +90,55 @@ function openFullscreen(element) {
     element.webkitRequestFullscreen();
   } else if (element.msRequestFullscreen) {
     element.msRequestFullscreen();
+  }
+}
+*/
+function fullscreen() {
+  let canvas = document.getElementById("canvas"); // Hier Canvas-Element referenzieren
+  let fullscreenButton = document.getElementById("fullscreen");
+
+  if (fullscreenButton.classList.contains("fullscreen")) {
+    // Wenn im Vollbildmodus, dann den Vollbildmodus beenden
+    exitFullscreen();
+  } else {
+    // Andernfalls in den Vollbildmodus wechseln
+    openFullscreen(canvas);
+  }
+}
+
+function openFullscreen(element) {
+  if (element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if (element.webkitRequestFullscreen) {
+    element.webkitRequestFullscreen();
+  } else if (element.msRequestFullscreen) {
+    element.msRequestFullscreen();
+  }
+}
+
+function exitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  }
+}
+
+document.addEventListener("fullscreenchange", handleFullscreenChange);
+document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+document.addEventListener("msfullscreenchange", handleFullscreenChange);
+
+function handleFullscreenChange() {
+  let fullscreenButton = document.getElementById("fullscreen");
+
+  if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+    // Canvas-Größe aktualisieren, wenn in den Vollbildmodus gewechselt wird
+   
+    fullscreenButton.classList.add("fullscreen");
+  } else {
+    fullscreenButton.classList.remove("fullscreen");
   }
 }
 

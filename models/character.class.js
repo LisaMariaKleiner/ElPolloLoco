@@ -4,10 +4,11 @@
 class Character extends MoveableObject {
   height = 250;
   width = 120;
-  y = 150; // 180 vorher
+  y = 150;
   speed = 4;
   world;
   coins;
+
 
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
@@ -80,7 +81,6 @@ class Character extends MoveableObject {
     this.animate();
   }
 
-
   /**
    * Initiates animation intervals for character movement, actions, and idle state.
    */
@@ -103,7 +103,6 @@ class Character extends MoveableObject {
     ];
   }
 
-
   /**
    * Handles character movement based on keyboard input.
    */
@@ -124,7 +123,6 @@ class Character extends MoveableObject {
     }
   }
 
-
   /**
    * Checks if the character can move to the right.
    *
@@ -133,7 +131,6 @@ class Character extends MoveableObject {
   canMoveRight() {
     return this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x;
   }
-
 
   /**
    * Checks if the character can move to the left.
@@ -170,7 +167,6 @@ class Character extends MoveableObject {
     }
   }
 
-
   /**
    * Handles character idle state by playing idle animations.
    */
@@ -200,7 +196,11 @@ class Character extends MoveableObject {
    * Initiates a short jump by setting the vertical speed to 10.
    */
   littleJump() {
-    this.speedY = 10;
+    this.speedY = 20;
+    this.world.invincible = true;
+    setTimeout(() => {
+      this.world.invincible = false;
+    }, 250);
   }
 
   /**
@@ -225,7 +225,6 @@ class Character extends MoveableObject {
     );
   }
 
-
   /**
    * Checks if the character is dead based on its energy level.
    *
@@ -234,7 +233,6 @@ class Character extends MoveableObject {
   isDead() {
     return this.energy == 0;
   }
-
 
   /**
    * Checks if the character is hurt based on the time elapsed since the last hit.
@@ -247,8 +245,7 @@ class Character extends MoveableObject {
     return timepassed < 1;
   }
 
-
-   /**
+  /**
    * Displays the game over screen, stops all animation intervals, and updates the UI.
    */
   showGameOverScreen() {
