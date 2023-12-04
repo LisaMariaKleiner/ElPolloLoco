@@ -158,6 +158,7 @@ class Character extends MoveableObject {
       deadSound.play();
       this.playAnimation(this.IMAGES_DEAD);
       this.showGameOverScreen();
+      this.stopIntervals();
     } else if (this.isHurt()) {
       painSound.play();
       this.playAnimation(this.IMAGES_HURT);
@@ -253,4 +254,6 @@ class Character extends MoveableObject {
     document.getElementById("gameOver").classList.remove("d-none");
     document.getElementById("game").classList.add("d-none");
   }
+
+  
 }

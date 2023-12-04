@@ -73,15 +73,25 @@ class Endboss extends MoveableObject {
     this.loadImages(this.IMAGES_BOSS_DEAD);
   }
 
+  walkingInterval;
+  attackInterval;
+  
+  stopAttack() {
+    stopAllIntervall(this.attackInterval, this.walkingInterval);
+  }
 
   /**
    * Animates the movement and actions of the Endboss.
    */
   animate() {
+    this.startMove()
+    this.startAttack();
+  }
+
+
+  startMove() {
     let i = 0;
-    let walkingInterval;
-    let attackInterval;
-    walkingInterval = setInterval(() => {
+    this.walkingInterval = setInterval(() => {
       if (i < 10) {
         this.playAnimation(this.IMAGES_BOSS_WALKING);
       } else {
@@ -94,8 +104,11 @@ class Endboss extends MoveableObject {
         hadFirstContact = true;
       }
     }, 150);
+  }
 
-    attackInterval = setInterval(() => {
+
+  startAttack() {
+    this.attackInterval = setInterval(() => {
       if (this.endbossIsHurt()) {
         this.playAnimation(this.IMAGES_BOSS_HURT);
         endBossMusic.play();
@@ -103,16 +116,17 @@ class Endboss extends MoveableObject {
       } else if (this.bossIsDead()) {
         this.playAnimation(this.IMAGES_BOSS_DEAD);
         endBossMusic.pause();
-        clearInterval(walkingInterval);
-        clearInterval(attackInterval);
+        clearInterval(this.walkingInterval);
+        clearInterval();
+        this.stopAttack();
+        stopAllIntervall();
         endbossKilled.play();
         setTimeout(() => {
           this.showWinScreen();
-        }, 1000);
+        }, 800);
       }
     }, 500);
   }
-
 
   /**
    * Checks if the boss is dead.

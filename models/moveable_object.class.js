@@ -14,7 +14,6 @@ class MoveableObject extends DrawableObject {
   bottles = [];
 
  
-
   /**
    * Defines the offset properties for collision detection.
    * @type {{top: number, right: number, bottom: number, left: number}}
@@ -26,12 +25,14 @@ class MoveableObject extends DrawableObject {
     left: 20,
   };
 
+
   offset1 = {
     top: 10,
     right: 10,
     bottom: 10,
     left: 10,
   };
+
 
   /**
    * Plays animation based on the provided images array.
@@ -43,6 +44,7 @@ class MoveableObject extends DrawableObject {
     this.img = this.imageCache[path];
     this.currentImage++;
   }
+
 
   /**
    * Applies gravity to the movable object, simulating vertical movement.
@@ -56,6 +58,7 @@ class MoveableObject extends DrawableObject {
     }, 1000 / 25);
   }
 
+
   /**
    * Checks if the object is in the air.
    * @returns {boolean} True if the object is in the air, otherwise false.
@@ -68,12 +71,14 @@ class MoveableObject extends DrawableObject {
     }
   }
 
+
   /**
    * Checks if the object is colliding with another movable object.
    * @param {MoveableObject} mo - The other movable object.
    * @returns {boolean} True if colliding, otherwise false.
    */
  
+
   isColliding(mo) {
     return (
       this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
@@ -83,20 +88,16 @@ class MoveableObject extends DrawableObject {
     );
   }
 
+
   isCollidingEnemy(mo) {
     let isHorizontalCollision =
       this.x + this.width - this.offset1.right > mo.x + mo.offset1.left &&
       this.x + this.offset1.left < mo.x + mo.width - mo.offset1.right;
-  
     let isVerticalCollision =
       this.y + this.height - this.offset1.bottom > mo.y + mo.offset1.top &&
       this.y + this.offset1.top < mo.y + mo.height - mo.offset1.bottom;
-  
-    // Kollision nur dann als true zurückgeben, wenn es eine vertikale Kollision gibt
     return isHorizontalCollision && isVerticalCollision;
   }
-  
-
   
 
   /**
@@ -129,4 +130,6 @@ class MoveableObject extends DrawableObject {
   moveLeft() {
     this.x -= this.speed;
   }
+
+  
 }

@@ -17,6 +17,12 @@ function startGame() {
   init();
 }
 
+function stopAllIntervall(params) {
+  for (let index = 0; index < 1000; index++) {
+    clearInterval(index);
+  }
+}
+
 
 /**
  * Changes the displays between the start screen and the game.
@@ -78,21 +84,6 @@ function toggleDirections() {
 /**
  * Opens the game in fullscreen mode.
  */
-/*function fullscreen() {
-  let fullscreen = document.getElementById("fullscreen");
-  openFullscreen(fullscreen);
-}
-
-function openFullscreen(element) {
-  if (element.requestFullscreen) {
-    element.requestFullscreen();
-  } else if (element.webkitRequestFullscreen) {
-    element.webkitRequestFullscreen();
-  } else if (element.msRequestFullscreen) {
-    element.msRequestFullscreen();
-  }
-}
-*/
 function fullscreen() {
   let canvas = document.getElementById("canvas"); // Hier Canvas-Element referenzieren
   let fullscreenButton = document.getElementById("fullscreen");

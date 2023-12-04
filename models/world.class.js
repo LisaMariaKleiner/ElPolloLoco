@@ -33,6 +33,7 @@ class World {
     this.setWorld();
     this.run();
   }
+  
 
   /**
    * Sets the current world for the main character.
@@ -45,7 +46,7 @@ class World {
    * Runs the game loop.
    */
   run() {
-    setInterval(() => {
+     let interval = setInterval(() => {
       this.checkCollisions();
       this.checkThrowObjects();
       this.checkCollisionsWithCoins();
@@ -53,8 +54,10 @@ class World {
       this.checkCollisionsBottleAndChicken();
       this.checkHitBossWithBottle();
     }, 50);
+    console.log('ID vom Interval ist,', interval);
   }
 
+  
   /**
    * Checks for throwable objects and throws them if the conditions are met.
    */
@@ -214,6 +217,8 @@ class World {
       bottle.y <= enemies.y + enemies.height
     );
   }
+
+  
 
   /**
    * Draws the boss image on the canvas.

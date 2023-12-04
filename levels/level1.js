@@ -46,6 +46,6 @@ function initLevel() {
     [new Coins(), new Coins(), new Coins(), new Coins(), new Coins()],
 
     [new Bottles(), new Bottles(), new Bottles(), new Bottles(), new Bottles()],
-    [new Endboss()]
+    [new Endboss()],
   );
 }
