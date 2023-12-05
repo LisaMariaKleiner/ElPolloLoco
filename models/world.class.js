@@ -54,7 +54,6 @@ class World {
       this.checkCollisionsBottleAndChicken();
       this.checkHitBossWithBottle();
     }, 50);
-    console.log('ID vom Interval ist,', interval);
   }
 
   
